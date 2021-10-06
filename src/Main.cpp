@@ -7,7 +7,7 @@
 
 int main()
 {
-	Application app("Name this");
+	Application app("PBR App");
 	app.run();
 
 	return 0;
