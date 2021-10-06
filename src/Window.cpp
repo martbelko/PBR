@@ -40,7 +40,7 @@ Window::Window(const std::string& title, int width, int height)
 	sInitialized = true;
 }
 
-void Window::onUpdate()
+void Window::onUpdate() const
 {
 	while (!glfwWindowShouldClose(mWindow))
 	{
@@ -54,7 +54,7 @@ void Window::onUpdate()
 	}
 }
 
-void Window::close()
+void Window::close() const
 {
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
@@ -66,17 +66,17 @@ void Window::setTitle(const std::string& title)
 	glfwSetWindowTitle(mWindow, title.data());
 }
 
-void Window::setWidth(int width)
+void Window::setWidth(int width) const
 {
 	glfwSetWindowSize(mWindow, width, getHeigt());
 }
 
-void Window::setHeight(int height)
+void Window::setHeight(int height) const
 {
 	glfwSetWindowSize(mWindow, getWidth(), height);
 }
 
-void Window::setSize(int width, int height)
+void Window::setSize(int width, int height) const
 {
 	glfwSetWindowSize(mWindow, width, height);
 }
