@@ -30,8 +30,6 @@ public:
 	int getWidth() const;
 	int getHeigt() const;
 private:
-	void processInput();
-private:
 	GLFWwindow* mWindow = nullptr;
 	std::string mTitle;
 private:

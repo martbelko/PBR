@@ -97,10 +97,4 @@ int Window::getHeigt() const
 	return height;
 }
 
-void Window::processInput()
-{
-	if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(mWindow, true);
-}
-
 bool Window::sInitialized = false;
