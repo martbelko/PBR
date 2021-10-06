@@ -3,13 +3,12 @@
 
 #include <iostream>
 
-#include "Window.h"
+#include "Application.h"
 
 int main()
 {
-	Window wnd("PBR App", 1280, 720);
-	wnd.onUpdate();
-	wnd.close();
+	Application app("Name this");
+	app.run();
 
 	return 0;
 }
