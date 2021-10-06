@@ -19,6 +19,8 @@ public:
 	void onUpdate() const;
 
 	void close() const;
+	void setShouldClose(bool shouldClose) const;
+	bool shouldClose() const;
 
 	void setTitle(const std::string& title);
 	void setWidth(int width) const;
@@ -29,6 +31,8 @@ public:
 	std::pair<int, int> getSize() const;
 	int getWidth() const;
 	int getHeigt() const;
+
+	GLFWwindow* getNativeWindow() const { return mWindow; }
 private:
 	GLFWwindow* mWindow = nullptr;
 	std::string mTitle;

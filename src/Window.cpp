@@ -52,6 +52,16 @@ void Window::close() const
 	glfwTerminate();
 }
 
+void Window::setShouldClose(bool shouldClose) const
+{
+	glfwSetWindowShouldClose(mWindow, static_cast<bool>(shouldClose));
+}
+
+bool Window::shouldClose() const
+{
+	return static_cast<bool>(glfwWindowShouldClose(mWindow));
+}
+
 void Window::setTitle(const std::string& title)
 {
 	mTitle = title;
