@@ -42,16 +42,8 @@ Window::Window(const std::string& title, int width, int height)
 
 void Window::onUpdate() const
 {
-	while (!glfwWindowShouldClose(mWindow))
-	{
-		processInput();
-
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(mWindow);
-		glfwPollEvents();
-	}
+	glfwSwapBuffers(mWindow);
+	glfwPollEvents();
 }
 
 void Window::close() const
