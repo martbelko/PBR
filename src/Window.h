@@ -11,7 +11,7 @@ public:
 	using EventCallbackFn = std::function<void(Event&)>;
 public:
 	Window(const std::string& title = "Default Window Title", int width = 800, int height = 600);
-	~Window() = default;
+	~Window();
 
 	Window(const Window&) = delete;
 	Window(Window&& window) = delete;
@@ -23,8 +23,7 @@ public:
 
 	void setEventCallback(const EventCallbackFn& callback) { mEventCallback = callback; }
 
-	void close() const;
-	void setShouldClose(bool shouldClose) const;
+	void setShouldClose(bool shouldClose = true) const;
 	bool shouldClose() const;
 
 	void setTitle(const std::string& title);

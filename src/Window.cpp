@@ -93,65 +93,65 @@ Window::Window(const std::string& title, int width, int height)
 	});
 
 	glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* glfwWindow, int button, int action, int mods)
-		{
-			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 
-			switch (action)
-			{
-			case GLFW_PRESS:
-			{
-				MouseButtonPressedEvent event(static_cast<MouseCode>(button));
-				window.mEventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
-				window.mEventCallback(event);
-				break;
-			}
-			}
-		});
+		switch (action)
+		{
+		case GLFW_PRESS:
+		{
+			MouseButtonPressedEvent event(static_cast<MouseCode>(button));
+			window.mEventCallback(event);
+			break;
+		}
+		case GLFW_RELEASE:
+		{
+			MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
+			window.mEventCallback(event);
+			break;
+		}
+		}
+	});
 
 	glfwSetScrollCallback(mWindow, [](GLFWwindow* glfwWindow, double xOffset, double yOffset)
-		{
-			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 
-			MouseScrolledEvent event((float)xOffset, (float)yOffset);
-			window.mEventCallback(event);
-		});
+		MouseScrolledEvent event((float)xOffset, (float)yOffset);
+		window.mEventCallback(event);
+	});
 
 	glfwSetCursorPosCallback(mWindow, [](GLFWwindow* glfwWindow, double xPos, double yPos)
-		{
-			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
 
-			MouseMovedEvent event((float)xPos, (float)yPos);
-			window.mEventCallback(event);
-		});
+		MouseMovedEvent event((float)xPos, (float)yPos);
+		window.mEventCallback(event);
+	});
 
 	sInitialized = true;
 }
 
-void Window::onUpdate() const
-{
-	glfwSwapBuffers(mWindow);
-	glfwPollEvents();
-}
-
-void Window::close() const
+Window::~Window()
 {
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
 }
 
-void Window::setShouldClose(bool shouldClose) const
+void Window::onUpdate() const
 {
-	glfwSetWindowShouldClose(mWindow, static_cast<bool>(shouldClose));
+	glfwPollEvents();
+	glfwSwapBuffers(mWindow);
+}
+
+void Window::setShouldClose(bool shoudClose) const
+{
+	glfwSetWindowShouldClose(mWindow, shoudClose);
 }
 
 bool Window::shouldClose() const
 {
-	return static_cast<bool>(glfwWindowShouldClose(mWindow));
+	return glfwWindowShouldClose(mWindow);
 }
 
 void Window::setTitle(const std::string& title)
