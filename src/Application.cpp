@@ -1,10 +1,13 @@
 #include "Application.h"
 
+#include <iostream>
 #include <cassert>
 
 #include <glad/glad.h>
 
 #include "Input.h"
+#include "Window.h"
+#include "Events/Event.h"
 
 Application::Application(const std::string& name)
 {
@@ -13,6 +16,7 @@ Application::Application(const std::string& name)
 
 	sInstance = this;
 	mWindow = new Window(name, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	mWindow->setEventCallback(OnEvent);
 }
 
 void Application::run() const
@@ -32,6 +36,11 @@ void Application::run() const
 Application::~Application()
 {
 	delete mWindow;
+}
+
+void Application::OnEvent(Event& e)
+{
+	std::cout << e << '\n';
 }
 
 Application* Application::sInstance = nullptr;
