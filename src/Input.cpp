@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Window.h"
 #include "Application.h"
 
 bool Input::IsKeyPressed(KeyCode keyCode)
