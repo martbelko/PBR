@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 
+#include "Core.h"
 #include "Input.h"
 #include "Window.h"
 #include "Events/Event.h"
@@ -16,7 +17,7 @@ Application::Application(const std::string& name)
 
 	sInstance = this;
 	mWindow = new Window(name, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	mWindow->setEventCallback(OnEvent);
+	mWindow->setEventCallback(BIND_EVENT_FN(Application::OnEvent));
 }
 
 void Application::run() const

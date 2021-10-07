@@ -23,7 +23,7 @@ public:
 public:
 	static Application& Get() { return *sInstance; }
 private:
-	static void OnEvent(Event& event);
+	void OnEvent(Event& event);
 private:
 	Window* mWindow;
 private:
