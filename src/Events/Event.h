@@ -33,7 +33,7 @@ public:
 
 	virtual ~Event() = default;
 
-	bool Handled = false;
+	bool handled = false;
 
 	virtual Type getEventType() const = 0;
 	virtual const char* getName() const = 0;
@@ -56,7 +56,7 @@ public:
 	{
 		if (mEvent.getEventType() == T::GetStaticType())
 		{
-			mEvent.Handled |= func(static_cast<T&>(mEvent));
+			mEvent.handled |= func(static_cast<T&>(mEvent));
 			return true;
 		}
 
