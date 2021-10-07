@@ -17,7 +17,7 @@ Application::Application(const std::string& name)
 
 	sInstance = this;
 	mWindow = new Window(name, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	mWindow->setEventCallback(BIND_EVENT_FN(Application::OnEvent));
+	mWindow->setEventCallback(BIND_EVENT_FN(Application::onEvent));
 }
 
 void Application::run() const
@@ -39,7 +39,7 @@ Application::~Application()
 	delete mWindow;
 }
 
-void Application::OnEvent(Event& e)
+void Application::onEvent(Event& e)
 {
 	std::cout << e << '\n';
 }
