@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Window.h"
+#include <string>
+
+class Window;
+class Event;
 
 class Application
 {
