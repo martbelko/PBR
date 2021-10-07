@@ -39,7 +39,7 @@ Application::~Application()
 	delete mWindow;
 }
 
-void Application::OnEvent(Event& e)
+void Application::onEvent(Event& e)
 {
 	std::cout << e << '\n';
 }
