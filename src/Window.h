@@ -1,11 +1,14 @@
 #pragma once
 
-#include <string>
+#include <functional>
 
-struct GLFWwindow; // Forward declaration
+struct GLFWwindow;
+class Event;
 
 class Window
 {
+public:
+	using EventCallbackFn = std::function<void(Event&)>;
 public:
 	Window(const std::string& title = "Default Window Title", int width = 800, int height = 600);
 	~Window() = default;
@@ -17,6 +20,8 @@ public:
 	Window& operator=(Window&& window) = delete;
 
 	void onUpdate() const;
+
+	void setEventCallback(const EventCallbackFn& callback) { mEventCallback = callback; }
 
 	void close() const;
 	void setShouldClose(bool shouldClose) const;
@@ -36,6 +41,8 @@ public:
 private:
 	GLFWwindow* mWindow = nullptr;
 	std::string mTitle;
+
+	EventCallbackFn mEventCallback;
 private:
 	static bool sInitialized;
 };

@@ -5,6 +5,10 @@
 
 #include <iostream>
 
+#include "Events/WindowEvent.h"
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
+
 Window::Window(const std::string& title, int width, int height)
 	: mTitle(title)
 {
@@ -36,6 +40,94 @@ Window::Window(const std::string& title, int width, int height)
 		std::cout << "Failed to initialize GLAD\n";
 		return;
 	}
+
+	glfwSetWindowUserPointer(mWindow, this);
+
+	glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* glfwWindow, int width, int height)
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+		WindowResizeEvent event(width, height);
+		window.mEventCallback(event);
+	});
+
+	glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* glfwWindow)
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+		WindowCloseEvent event;
+		window.mEventCallback(event);
+	});
+
+	glfwSetKeyCallback(mWindow, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+
+		switch (action)
+		{
+		case GLFW_PRESS:
+		{
+			KeyPressedEvent event(static_cast<KeyCode>(key), 0);
+			window.mEventCallback(event);
+			break;
+		}
+		case GLFW_RELEASE:
+		{
+			KeyReleasedEvent event(static_cast<KeyCode>(key));
+			window.mEventCallback(event);
+			break;
+		}
+		case GLFW_REPEAT:
+		{
+			KeyPressedEvent event(static_cast<KeyCode>(key), 1);
+			window.mEventCallback(event);
+			break;
+		}
+		}
+	});
+
+	glfwSetCharCallback(mWindow, [](GLFWwindow* glfwWindow, unsigned int keycode)
+	{
+		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+
+		KeyTypedEvent event(static_cast<KeyCode>(keycode));
+		window.mEventCallback(event);
+	});
+
+	glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* glfwWindow, int button, int action, int mods)
+		{
+			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+
+			switch (action)
+			{
+			case GLFW_PRESS:
+			{
+				MouseButtonPressedEvent event(static_cast<MouseCode>(button));
+				window.mEventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
+				window.mEventCallback(event);
+				break;
+			}
+			}
+		});
+
+	glfwSetScrollCallback(mWindow, [](GLFWwindow* glfwWindow, double xOffset, double yOffset)
+		{
+			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+
+			MouseScrolledEvent event((float)xOffset, (float)yOffset);
+			window.mEventCallback(event);
+		});
+
+	glfwSetCursorPosCallback(mWindow, [](GLFWwindow* glfwWindow, double xPos, double yPos)
+		{
+			Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
+
+			MouseMovedEvent event((float)xPos, (float)yPos);
+			window.mEventCallback(event);
+		});
 
 	sInitialized = true;
 }
