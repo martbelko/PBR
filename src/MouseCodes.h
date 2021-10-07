@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-enum class MouseCode : uint64_t
+enum class MouseCode : uint16_t
 {
 	// From glfw3.h
 	Button0 = 0,
