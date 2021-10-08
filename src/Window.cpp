@@ -16,7 +16,7 @@ Window::Window(const std::string& title, int width, int height)
 	assert(!sInitialized, "There may be only 1 window");
 
 	int status = glfwInit();
-	assert(status == GLFW_FALSE, "GLFWInit() failed");
+	assert(status == GLFW_TRUE, "GLFWInit() failed");
 
 	mWindow = glfwCreateWindow(width, height, mTitle.c_str(), nullptr, nullptr);
 	if (mWindow == nullptr)
