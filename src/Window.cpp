@@ -87,7 +87,6 @@ Window::Window(const std::string& title, int width, int height)
 	glfwSetCharCallback(mWindow, [](GLFWwindow* glfwWindow, unsigned int keycode)
 	{
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
-
 		KeyTypedEvent event(static_cast<KeyCode>(keycode));
 		window.mEventCallback(event);
 	});
@@ -116,7 +115,6 @@ Window::Window(const std::string& title, int width, int height)
 	glfwSetScrollCallback(mWindow, [](GLFWwindow* glfwWindow, double xOffset, double yOffset)
 	{
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
-
 		MouseScrolledEvent event((float)xOffset, (float)yOffset);
 		window.mEventCallback(event);
 	});
@@ -124,7 +122,6 @@ Window::Window(const std::string& title, int width, int height)
 	glfwSetCursorPosCallback(mWindow, [](GLFWwindow* glfwWindow, double xPos, double yPos)
 	{
 		Window& window = *(Window*)glfwGetWindowUserPointer(glfwWindow);
-
 		MouseMovedEvent event((float)xPos, (float)yPos);
 		window.mEventCallback(event);
 	});
