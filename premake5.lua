@@ -47,6 +47,7 @@ workspace "PBRApp"
 	IncludeDir = {}
 	IncludeDir["GLFW"] = "%{wks.location}/vendor/GLFW/include"
 	IncludeDir["Glad"] = "%{wks.location}/vendor/Glad/include"
+	IncludeDir["glm"] = "%{wks.location}/vendor/glm"
 
 	group "Dependencies"
 		include "vendor/GLFW"
@@ -69,7 +70,8 @@ project "PBRApp"
 	{
 		"src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.glm}",
 	}
 
 	links
