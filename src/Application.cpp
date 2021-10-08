@@ -44,13 +44,14 @@ Application::~Application()
 void Application::onEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.dispatch<WindowResizeEvent>(Application::onWindowResize);
+	dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
 	std::cout << e << '\n';
 }
 
 bool Application::onWindowResize(WindowResizeEvent& e)
 {
 	glViewport(0, 0, e.getWidth(), e.getHeight());
+	return true;
 }
 
 Application* Application::sInstance = nullptr;
