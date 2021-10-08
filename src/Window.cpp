@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <cassert>
 
 #include "Events/WindowEvent.h"
 #include "Events/KeyEvent.h"
@@ -12,25 +13,16 @@
 Window::Window(const std::string& title, int width, int height)
 	: mTitle(title)
 {
-	if (sInitialized)
-	{
-		std::cout << "There may be only 1 window\n";
-		return;
-	}
+	assert(!sInitialized, "There may be only 1 window");
 
-	if (glfwInit() == GLFW_FALSE)
-	{
-		std::cout << "GLFWInit() failed\n";
-		return;
-	}
+	int status = glfwInit();
+	assert(status == GLFW_FALSE, "GLFWInit() failed");
 
 	mWindow = glfwCreateWindow(width, height, mTitle.c_str(), nullptr, nullptr);
 	if (mWindow == nullptr)
 	{
-		std::cout << "Failed to create GLFW window\n";
 		glfwTerminate();
-		sInitialized = false;
-		return;
+		assert(false, "Failed to create GLFW window");
 	}
 
 	glfwMakeContextCurrent(mWindow);
