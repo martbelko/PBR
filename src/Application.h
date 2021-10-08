@@ -4,6 +4,7 @@
 
 class Window;
 class Event;
+class WindowResizeEvent;
 
 class Application
 {
@@ -23,7 +24,9 @@ public:
 public:
 	static Application& Get() { return *sInstance; }
 private:
-	void onEvent(Event& event);
+	void onEvent(Event& e);
+
+	bool onWindowResize(WindowResizeEvent& e);
 private:
 	Window* mWindow;
 private:

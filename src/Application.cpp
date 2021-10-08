@@ -8,7 +8,9 @@
 #include "Core.h"
 #include "Input.h"
 #include "Window.h"
+
 #include "Events/Event.h"
+#include "Events/WindowEvent.h"
 
 Application::Application(const std::string& name)
 {
@@ -41,7 +43,14 @@ Application::~Application()
 
 void Application::onEvent(Event& e)
 {
+	EventDispatcher dispatcher(e);
+	dispatcher.dispatch<WindowResizeEvent>(Application::onWindowResize);
 	std::cout << e << '\n';
+}
+
+bool Application::onWindowResize(WindowResizeEvent& e)
+{
+	glViewport(0, 0, e.getWidth(), e.getHeight());
 }
 
 Application* Application::sInstance = nullptr;
