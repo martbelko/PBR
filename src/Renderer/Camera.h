@@ -16,6 +16,7 @@ public:
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
 	float getZoom() const { return mZoom; }
+	const glm::vec3& getPosition() const { return mPosition; }
 	glm::mat4 getViewMatrix() const;
 
 	void processKeyboard(Direction direction, float deltaTime);
