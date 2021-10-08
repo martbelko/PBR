@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Core.h"
+#include "Base.h"
 
 #define EVENT_CLASS_TYPE(type) static Event::Type GetStaticType() { return type; }\
                                virtual Event::Type getEventType() const override { return GetStaticType(); }\

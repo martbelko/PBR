@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 
-#include "Core.h"
+#include "Base.h"
 #include "Input.h"
 #include "Window.h"
 
