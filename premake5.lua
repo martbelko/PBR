@@ -13,6 +13,8 @@ workspace "PBRApp"
 		systemversion "latest"
 		defines
 		{
+			"WIN32_LEAN_AND_MEAN",
+			"NOMINMAX",
 			"PLATFORM_WINDOWS"
 		}
 
