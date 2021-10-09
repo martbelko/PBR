@@ -24,11 +24,29 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Camera.h"
 
-Ref<VertexArray> sphereVAO = nullptr;
-void renderSphere()
+class Sphere
 {
-	if (sphereVAO == nullptr)
+public:
+	Sphere(const glm::vec3& color)
+		: mColor(color)
 	{
+		if (sVA == nullptr)
+			sVA = GenerateSphereVA();
+	}
+
+	void render()
+	{
+		sVA->bind();
+		glDrawElements(GL_TRIANGLE_STRIP, sVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+	}
+
+	void setColor(const glm::vec3& color) { mColor = color; }
+	const glm::vec3& getColor() const { return mColor; }
+private:
+	static Ref<VertexArray> GenerateSphereVA()
+	{
+		Ref<VertexArray> va = VertexArray::Create();
+
 		std::vector<glm::vec3> positions;
 		std::vector<glm::vec2> uv;
 		std::vector<glm::vec3> normals;
@@ -72,6 +90,7 @@ void renderSphere()
 					indices.push_back(y * (X_SEGMENTS + 1) + x);
 				}
 			}
+
 			oddRow = !oddRow;
 		}
 
@@ -94,7 +113,7 @@ void renderSphere()
 			}
 		}
 
-		sphereVAO = VertexArray::Create();
+		va = VertexArray::Create();
 
 		BufferLayout layout = {
 			{ ShaderDataType::Float3, "Position" },
@@ -107,13 +126,18 @@ void renderSphere()
 
 		auto ib = IndexBuffer::Create(indices.data(), indices.size());
 
-		sphereVAO->addVertexBuffer(vb);
-		sphereVAO->setIndexBuffer(ib);
-	}
+		va->addVertexBuffer(vb);
+		va->setIndexBuffer(ib);
 
-	sphereVAO->bind();
-	glDrawElements(GL_TRIANGLE_STRIP, sphereVAO->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
-}
+		return va;
+	}
+private:
+	glm::vec3 mColor;
+private:
+	static Ref<VertexArray> sVA;
+};
+
+Ref<VertexArray> Sphere::sVA = nullptr;
 
 Application::Application(const std::string& name)
 {
@@ -197,7 +221,8 @@ void Application::run()
 				));
 
 				pbrShader->setMat4("model", model);
-				renderSphere();
+				Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
+				sphere.render();
 			}
 		}
 
@@ -219,7 +244,8 @@ void Application::run()
 			color.w /= largest;
 			flatShader->setFloat4("aColor", color);
 
-			renderSphere();
+			Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
+			sphere.render();
 		}
 
 		mWindow->onUpdate();
