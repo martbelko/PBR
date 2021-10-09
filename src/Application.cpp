@@ -54,7 +54,7 @@ private:
 
 		constexpr unsigned int X_SEGMENTS = 64;
 		constexpr unsigned int Y_SEGMENTS = 64;
-		constexpr float PI = 3.14159265359;
+		constexpr float PI = 3.14159265359f;
 		for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
 		{
 			for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
