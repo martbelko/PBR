@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Timestep.h"
+
 #include "Renderer/Camera.h"
 
 class Window;
@@ -32,7 +34,7 @@ public:
 public:
 	static Application& Get() { return *sInstance; }
 private:
-	void processInput();
+	void processInput(Timestep timestep);
 
 	void onEvent(Event& e);
 
@@ -42,6 +44,7 @@ private:
 	bool onMouseScrolled(MouseScrolledEvent& e);
 private:
 	Window* mWindow;
+	float mLastFrameTime = 0.0f;
 
 	Camera mCamera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	bool mFirstMouse = false;

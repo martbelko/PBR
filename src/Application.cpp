@@ -13,6 +13,7 @@
 #include "Base.h"
 #include "Input.h"
 #include "Window.h"
+#include "Timestep.h"
 
 #include "Events/Event.h"
 #include "Events/WindowEvent.h"
@@ -160,7 +161,11 @@ void Application::run()
 
 	while (!mWindow->shouldClose())
 	{
-		processInput();
+		float timeMs = static_cast<float>(glfwGetTime()) * 1000.0f; // TODO: Use chrono instead of glfwGetTime()
+		Timestep timestep = timeMs - mLastFrameTime;
+		mLastFrameTime = timeMs;
+
+		processInput(timestep);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -257,19 +262,21 @@ Application::~Application()
 	delete mWindow;
 }
 
-void Application::processInput()
+void Application::processInput(Timestep ts)
 {
 	if (Input::IsKeyPressed(KeyCode::Escape))
 		mWindow->setShouldClose(true);
 
+	float x = ts.getSeconds();
+	std::cout << x << '\n';
 	if (Input::IsKeyPressed(KeyCode::W))
-		mCamera.processKeyboard(Camera::Direction::Forward, 0.1f);
+		mCamera.processKeyboard(Camera::Direction::Forward, ts.getSeconds());
 	else if (Input::IsKeyPressed(KeyCode::S))
-		mCamera.processKeyboard(Camera::Direction::Backward, 0.1f);
+		mCamera.processKeyboard(Camera::Direction::Backward, ts.getSeconds());
 	if (Input::IsKeyPressed(KeyCode::A))
-		mCamera.processKeyboard(Camera::Direction::Left, 0.1f);
+		mCamera.processKeyboard(Camera::Direction::Left, ts.getSeconds());
 	else if (Input::IsKeyPressed(KeyCode::D))
-		mCamera.processKeyboard(Camera::Direction::Right, 0.1f);
+		mCamera.processKeyboard(Camera::Direction::Right, ts.getSeconds());
 }
 
 void Application::onEvent(Event& e)
