@@ -39,7 +39,7 @@ private:
 private:
 	static constexpr float DEFAULT_YAW = -90.0f;
 	static constexpr float DEFAULT_PITCH = 0.0f;
-	static constexpr float DEFAULT_SPEED = 2.5f;
+	static constexpr float DEFAULT_SPEED = 20.0f;
 	static constexpr float DEFAULT_SENSITIVITY = 0.1f;
 	static constexpr float DEFAULT_ZOOM = 45.0f;
 };
