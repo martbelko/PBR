@@ -50,6 +50,7 @@ workspace "PBRApp"
 	IncludeDir["GLFW"] = "%{wks.location}/vendor/GLFW/include"
 	IncludeDir["Glad"] = "%{wks.location}/vendor/Glad/include"
 	IncludeDir["glm"] = "%{wks.location}/vendor/glm"
+	IncludeDir["stb_image"] = "%{wks.location}/vendor/stb_image"
 
 	group "Dependencies"
 		include "vendor/GLFW"
@@ -65,7 +66,9 @@ project "PBRApp"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp"
+		"src/**.cpp",
+		"vendor/stb_image/**.h",
+		"vendor/stb_image/**.cpp"
 	}
 
 	includedirs
@@ -74,6 +77,7 @@ project "PBRApp"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links
