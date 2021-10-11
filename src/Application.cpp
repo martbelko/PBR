@@ -117,9 +117,9 @@ private:
 		va = VertexArray::Create();
 
 		BufferLayout layout = {
-			{ ShaderDataType::Float3, "Position" },
-			{ ShaderDataType::Float3, "Normal" },
-			{ ShaderDataType::Float2, "TexCoord" }
+			{ ShaderDataType::Float3 },
+			{ ShaderDataType::Float3 },
+			{ ShaderDataType::Float2 }
 		};
 
 		auto vb = VertexBuffer::Create(data.data(), data.size() * sizeof(float));
