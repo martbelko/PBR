@@ -267,8 +267,6 @@ void Application::processInput(Timestep ts)
 	if (Input::IsKeyPressed(KeyCode::Escape))
 		mWindow->setShouldClose(true);
 
-	float x = ts.getSeconds();
-	std::cout << x << '\n';
 	if (Input::IsKeyPressed(KeyCode::W))
 		mCamera.processKeyboard(Camera::Direction::Forward, ts.getSeconds());
 	else if (Input::IsKeyPressed(KeyCode::S))
