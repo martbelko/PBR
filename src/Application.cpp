@@ -10,6 +10,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <stb_image.h>
+
 #include "Base.h"
 #include "Input.h"
 #include "Window.h"
@@ -138,7 +140,123 @@ private:
 	static Ref<VertexArray> sVA;
 };
 
+class Cube
+{
+public:
+	Cube(const glm::vec3& color)
+		: mColor(color)
+	{
+		if (sVA == nullptr)
+			sVA = GenerateVA();
+	}
+
+	void render()
+	{
+		sVA->bind();
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
+
+	void setColor(const glm::vec3& color) { mColor = color; }
+	const glm::vec3& getColor() const { return mColor; }
+private:
+	static Ref<VertexArray> GenerateVA()
+	{
+		float vertices[] = {
+			-1.0f,  1.0f, -1.0f,
+			-1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			-1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f
+		};
+
+		auto va = VertexArray::Create();
+
+		BufferLayout layout = {
+			{ ShaderDataType::Float3 }
+		};
+
+		auto vb = VertexBuffer::Create(vertices, sizeof(vertices));
+		vb->setLayout(layout);
+		va->addVertexBuffer(vb);
+
+		return va;
+	}
+private:
+	glm::vec3 mColor;
+private:
+	static Ref<VertexArray> sVA;
+};
+
+unsigned int loadCubemap(const std::vector<std::string>& faces)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+			);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
+}
+
 Ref<VertexArray> Sphere::sVA = nullptr;
+Ref<VertexArray> Cube::sVA = nullptr;
 
 Application::Application(const std::string& name)
 {
@@ -156,10 +274,21 @@ void Application::run()
 
 	Ref<Shader> pbrShader = Shader::CreateFromFile("assets/shaders/PBRVS.glsl", "assets/shaders/PBRPS.glsl");
 	Ref<Shader> flatShader = Shader::CreateFromFile("assets/shaders/FlatColorVS.glsl", "assets/shaders/FlatColorPS.glsl");
+	Ref<Shader> skyboxShader = Shader::CreateFromFile("assets/shaders/Skybox.vert", "assets/shaders/Skybox.frag");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	std::vector<std::string> faces = {
+		"assets/textures/skybox/right.jpg",
+		"assets/textures/skybox/left.jpg",
+		"assets/textures/skybox/top.jpg",
+		"assets/textures/skybox/bottom.jpg",
+		"assets/textures/skybox/front.jpg",
+		"assets/textures/skybox/back.jpg"
+	};
+	unsigned int cubemapTexture = loadCubemap(faces);
 
 	while (!mWindow->shouldClose())
 	{
@@ -172,13 +301,14 @@ void Application::run()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		pbrShader->bind();
-
 		glm::mat4 projection = glm::perspective(glm::radians(mCamera.getZoom()),
 			(float)mWindow->getWidth() / (float)mWindow->getHeigt(), 0.1f, 1000.0f);
+		glm::mat4 view = mCamera.getViewMatrix();
+
+		pbrShader->bind();
+
 		pbrShader->setMat4("projection", projection);
 
-		glm::mat4 view = mCamera.getViewMatrix();
 		pbrShader->setMat4("view", view);
 		pbrShader->setFloat3("camPos", mCamera.getPosition());
 
@@ -196,12 +326,12 @@ void Application::run()
 			glm::vec3(1000.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1000.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, 1000.0f),
-			glm::vec3(333.3f, 333.3f, 333.3f)
+			glm::vec3(100.0f, 100.0f, 100.0f)
 		};
 
 		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
 		{
-			glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+			glm::vec3 newPos = lightPositions[i];
 			pbrShader->setFloat3("lightPositions[" + std::to_string(i) + "]", newPos);
 			pbrShader->setFloat3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
 		}
@@ -238,22 +368,31 @@ void Application::run()
 		flatShader->setMat4("view", view);
 		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
 		{
-			glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+			glm::vec3 newPos = lightPositions[i];
 			model = glm::mat4(1.0f);
 			model = glm::translate(model, newPos);
 			flatShader->setMat4("model", model);
 
 			glm::vec4 color = glm::vec4(lightColors[i], 1.0f);
-			float largest = std::max({ color.x, color.y, color.z, color.w });
-			color.x /= largest;
-			color.y /= largest;
-			color.z /= largest;
-			color.w /= largest;
 			flatShader->setFloat4("aColor", color);
 
 			Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
 			sphere.render();
 		}
+
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader->bind();
+		view = glm::mat4(glm::mat3(view)); // remove translation from the view matrix
+		skyboxShader->setMat4("uView", view);
+		skyboxShader->setMat4("uProjection", projection);
+		skyboxShader->setInt("uSkybox", 0);
+		// skybox cube
+		Cube cube(glm::vec4(1.0f));
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		cube.render();
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default
 
 		mWindow->onUpdate();
 	}
