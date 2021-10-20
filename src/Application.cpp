@@ -363,23 +363,6 @@ void Application::run()
 			}
 		}
 
-		flatShader->bind();
-		flatShader->setMat4("projection", projection);
-		flatShader->setMat4("view", view);
-		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
-		{
-			glm::vec3 newPos = lightPositions[i];
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, newPos);
-			flatShader->setMat4("model", model);
-
-			glm::vec4 color = glm::vec4(lightColors[i], 1.0f);
-			flatShader->setFloat4("aColor", color);
-
-			Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
-			sphere.render();
-		}
-
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->bind();
 		view = glm::mat4(glm::mat3(view)); // remove translation from the view matrix
