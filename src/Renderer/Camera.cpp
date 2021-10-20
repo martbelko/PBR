@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+Camera::Camera(const glm::vec3& position, const glm::vec3& up, float yaw, float pitch)
 	: mFront(glm::vec3(0.0f, 0.0f, -1.0f)), mMovementSpeed(DEFAULT_SPEED), mMouseSensitivity(DEFAULT_SENSITIVITY), mZoom(DEFAULT_ZOOM)
 {
 	mPosition = position;
