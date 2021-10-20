@@ -35,9 +35,9 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
 	float r = (roughness + 1.0);
-	float k = (r*r) / 8.0;
+	float k = (r * r) / 8.0;
 
-	float nom   = NdotV;
+	float nom = NdotV;
 	float denom = NdotV * (1.0 - k) + k;
 
 	return nom / denom;
@@ -81,10 +81,10 @@ void main()
 
 		// Cook-Torrance BRDF
 		float NDF = DistributionGGX(N, H, roughness);
-		float G   = GeometrySmith(N, V, L, roughness);
-		vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+		float G = GeometrySmith(N, V, L, roughness);
+		vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 
-		vec3 numerator    = NDF * G * F;
+		vec3 numerator = NDF * G * F;
 		float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
 		vec3 specular = numerator / denominator;
 
@@ -106,8 +106,7 @@ void main()
 		Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
 	}
 
-	// ambient lighting (note that the next IBL tutorial will replace
-	// this ambient lighting with environment lighting).
+	// ambient lighting
 	vec3 ambient = vec3(0.03) * albedo * ao;
 
 	vec3 color = ambient + Lo;
@@ -115,7 +114,7 @@ void main()
 	// HDR tonemapping
 	color = color / (color + vec3(1.0));
 	// gamma correct
-	color = pow(color, vec3(1.0/2.2));
+	color = pow(color, vec3(1.0 / 2.2));
 
-	FragColor = vec4(color, 0.0);
+	FragColor = vec4(color, 1.0);
 }
