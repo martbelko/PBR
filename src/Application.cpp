@@ -336,32 +336,13 @@ void Application::run()
 			pbrShader->setFloat3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
 		}
 
-		int nrRows = 10;
-		int nrColumns = 10;
-		float spacing = 2.5f;
-
-		glm::mat4 model = glm::mat4(1.0f);
-		for (int row = 0; row < nrRows; ++row)
-		{
-			pbrShader->setFloat("metallic", (float)row / (float)nrRows);
-			for (int col = 0; col < nrColumns; ++col)
-			{
-				// we clamp the roughness to 0.05 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
-				// on direct lighting.
-				pbrShader->setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
-
-				model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(
-					(col - (nrColumns / 2)) * spacing,
-					(row - (nrRows / 2)) * spacing,
-					0.0f
-				));
-
-				pbrShader->setMat4("model", model);
-				Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
-				sphere.render();
-			}
-		}
+		pbrShader->setFloat("metallic", 1.0f);
+		pbrShader->setFloat("roughness", glm::clamp(0.05f, 0.05f, 1.0f));
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		pbrShader->setMat4("model", model);
+		Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
+		sphere.render();
 
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->bind();
