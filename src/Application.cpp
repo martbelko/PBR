@@ -434,13 +434,6 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 
 bool Application::onMouseMoved(MouseMovedEvent& e)
 {
-	if (mFirstMouse)
-	{
-		lastX = e.getX();
-		lastY = e.getY();
-		mFirstMouse = false;
-	}
-
 	float xoffset = e.getX() - lastX;
 	float yoffset = lastY - e.getY(); // reversed since y-coordinates go from bottom to top
 
