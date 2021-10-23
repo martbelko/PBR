@@ -246,6 +246,7 @@ unsigned int loadCubemap(const std::vector<std::string>& faces)
 			stbi_image_free(data);
 		}
 	}
+
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -275,6 +276,7 @@ void Application::run()
 	Ref<Shader> pbrShader = Shader::CreateFromFile("assets/shaders/PBRVS.glsl", "assets/shaders/PBRPS.glsl");
 	Ref<Shader> flatShader = Shader::CreateFromFile("assets/shaders/FlatColorVS.glsl", "assets/shaders/FlatColorPS.glsl");
 	Ref<Shader> skyboxShader = Shader::CreateFromFile("assets/shaders/Skybox.vert", "assets/shaders/Skybox.frag");
+	Ref<Shader> irradianceShader = Shader::CreateFromFile("assets/shaders/Irradiance.vert", "assets/shaders/Irradiance.frag");
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -290,6 +292,56 @@ void Application::run()
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
 
+	// Create irrariance map
+	uint32_t texWidth = 32, texHeight = 32;
+
+	unsigned int irradianceMap;
+	glGenTextures(1, &irradianceMap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+	for (uint32_t i = 0; i < 6; ++i)
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, texWidth, texHeight, 0, GL_RGB, GL_FLOAT, nullptr);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// pbr: solve diffuse integral by convolution to create an irradiance (cube)map.
+	// -----------------------------------------------------------------------------
+	unsigned int captureFBO;
+	glCreateFramebuffers(1, &captureFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+
+	irradianceShader->bind();
+	irradianceShader->setInt("environmentMap", 0);
+	irradianceShader->setMat4("projection", glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f));
+	glBindTextureUnit(0, cubemapTexture);
+
+	glm::mat4 captureViews[] = {
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+	};
+
+	glViewport(0, 0, texWidth, texHeight); // don't forget to configure the viewport to the capture dimensions.
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	Cube cube(glm::vec3(1.0f));
+	for (uint32_t i = 0; i < 6; ++i)
+	{
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+
+		irradianceShader->setMat4("view", captureViews[i]);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		cube.render();
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	while (!mWindow->shouldClose())
 	{
 		float timeMs = static_cast<float>(glfwGetTime()) * 1000.0f; // TODO: Use chrono instead of glfwGetTime()
@@ -298,6 +350,7 @@ void Application::run()
 
 		processInput(timestep);
 
+		glViewport(0, 0, mWindow->getWidth(), mWindow->getHeigt());
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -344,7 +397,7 @@ void Application::run()
 		Sphere sphere(glm::vec3(1.0f, 1.0f, 1.0f));
 		sphere.render();
 
-		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		glDepthFunc(GL_LEQUAL); // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader->bind();
 		view = glm::mat4(glm::mat3(view)); // remove translation from the view matrix
 		skyboxShader->setMat4("uView", view);
@@ -352,8 +405,7 @@ void Application::run()
 		skyboxShader->setInt("uSkybox", 0);
 		// skybox cube
 		Cube cube(glm::vec4(1.0f));
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glBindTextureUnit(0, irradianceMap);
 		cube.render();
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS); // set depth function back to default
