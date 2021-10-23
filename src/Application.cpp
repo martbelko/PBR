@@ -373,13 +373,13 @@ void Application::processInput(Timestep ts)
 		mWindow->setShouldClose(true);
 
 	if (Input::IsKeyPressed(KeyCode::W))
-		mCamera.processKeyboard(Camera::Direction::Forward, ts.getSeconds());
+		mCamera.processKeyboard(Camera::Direction::Forward, ts);
 	else if (Input::IsKeyPressed(KeyCode::S))
-		mCamera.processKeyboard(Camera::Direction::Backward, ts.getSeconds());
+		mCamera.processKeyboard(Camera::Direction::Backward, ts);
 	if (Input::IsKeyPressed(KeyCode::A))
-		mCamera.processKeyboard(Camera::Direction::Left, ts.getSeconds());
+		mCamera.processKeyboard(Camera::Direction::Left, ts);
 	else if (Input::IsKeyPressed(KeyCode::D))
-		mCamera.processKeyboard(Camera::Direction::Right, ts.getSeconds());
+		mCamera.processKeyboard(Camera::Direction::Right, ts);
 }
 
 void Application::onEvent(Event& e)

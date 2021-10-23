@@ -8,7 +8,7 @@ public:
 	{
 	}
 
-	operator float() const { return mTimeMs; }
+	operator float() const { return mTimeMs / 1000.0f; }
 
 	float getSeconds() const { return mTimeMs / 1000.0f; }
 	float getMilliseconds() const { return mTimeMs; }
