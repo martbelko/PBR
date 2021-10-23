@@ -124,10 +124,10 @@ private:
 			{ ShaderDataType::Float2 }
 		};
 
-		auto vb = VertexBuffer::Create(data.data(), data.size() * sizeof(float));
+		auto vb = VertexBuffer::Create(data.data(), static_cast<uint32_t>(data.size() * sizeof(float)));
 		vb->setLayout(layout);
 
-		auto ib = IndexBuffer::Create(indices.data(), indices.size());
+		auto ib = IndexBuffer::Create(indices.data(), static_cast<uint32_t>(indices.size()));
 
 		va->addVertexBuffer(vb);
 		va->setIndexBuffer(ib);
