@@ -223,39 +223,6 @@ private:
 	static Ref<VertexArray> sVA;
 };
 
-unsigned int loadCubemap(const std::vector<std::string>& faces)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-	int width, height, nrChannels;
-	for (unsigned int i = 0; i < faces.size(); i++)
-	{
-		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-			);
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
-			stbi_image_free(data);
-		}
-	}
-
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureID;
-}
-
 Ref<VertexArray> Sphere::sVA = nullptr;
 Ref<VertexArray> Cube::sVA = nullptr;
 
@@ -353,9 +320,8 @@ void Application::run()
 	// ----------------------
 	unsigned int captureFBO;
 	glGenFramebuffers(1, &captureFBO);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	uint32_t size = 512;
+	uint32_t size = 1024;
 
 	// pbr: load the HDR environment map
 	// ---------------------------------
@@ -428,7 +394,6 @@ void Application::run()
 		Cube cube(glm::vec3(1.0f));
 		cube.render();
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
@@ -470,7 +435,6 @@ void Application::run()
 		Cube cube(glm::vec3(1.0f));
 		cube.render();
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// pbr: create a pre-filter cubemap, and re-scale capture FBO to pre-filter scale.
 	// --------------------------------------------------------------------------------
@@ -494,8 +458,7 @@ void Application::run()
 	prefilterShader->bind();
 	prefilterShader->setInt("environmentMap", 0);
 	prefilterShader->setMat4("projection", captureProjection);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	glBindTextureUnit(0, envCubemap);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 	unsigned int maxMipLevels = 5;
@@ -544,7 +507,6 @@ void Application::run()
 	renderQuad();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 
 	// initialize static shader uniforms before rendering
 	// --------------------------------------------------
@@ -611,7 +573,6 @@ void Application::run()
 			}
 		}
 
-
 		// render light source (simply re-render sphere at light positions)
 		// this looks a bit off as we use the same shader, but it'll make their positions obvious and
 		// keeps the codeprint small.
@@ -635,14 +596,14 @@ void Application::run()
 		backgroundShader->setMat4("view", view);
 		backgroundShader->setMat4("projection", projection);
 		glBindTextureUnit(0, envCubemap);
-		//glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap); // display irradiance map
-		//glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap); // display prefilter map
+		//glBindTextureUnit(0, irradianceMap); // display irradiance map
+		//glBindTextureUnit(0, prefilterMap); // display prefilter map
 		Cube cube(glm::vec3(1.0f));
 		cube.render();
 
 		// render BRDF map to screen
-		//brdfShader.Use();
-		//renderQuad();
+		// brdfShader->bind();
+		// renderQuad();
 
 		mWindow->onUpdate();
 	}
