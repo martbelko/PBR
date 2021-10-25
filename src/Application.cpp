@@ -508,9 +508,6 @@ void Application::run()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// initialize static shader uniforms before rendering
-	// --------------------------------------------------
-
 	// then before rendering, configure the viewport to the original framebuffer's screen dimensions
 	int scrWidth, scrHeight;
 	glfwGetFramebufferSize(mWindow->getNativeWindow(), &scrWidth, &scrHeight);
