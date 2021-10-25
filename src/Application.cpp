@@ -30,21 +30,13 @@
 class Sphere
 {
 public:
-	Sphere(const glm::vec3& color)
-		: mColor(color)
-	{
-		if (sVA == nullptr)
-			sVA = GenerateSphereVA();
-	}
+	Sphere() = delete;
 
-	void render()
+	static void Render()
 	{
 		sVA->bind();
 		glDrawElements(GL_TRIANGLE_STRIP, sVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 	}
-
-	void setColor(const glm::vec3& color) { mColor = color; }
-	const glm::vec3& getColor() const { return mColor; }
 private:
 	static Ref<VertexArray> GenerateSphereVA()
 	{
@@ -135,29 +127,19 @@ private:
 		return va;
 	}
 private:
-	glm::vec3 mColor;
-private:
 	static Ref<VertexArray> sVA;
 };
 
 class Cube
 {
 public:
-	Cube(const glm::vec3& color)
-		: mColor(color)
-	{
-		if (sVA == nullptr)
-			sVA = GenerateVA();
-	}
+	Cube() = delete;
 
-	void render()
+	static void Render()
 	{
 		sVA->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
-
-	void setColor(const glm::vec3& color) { mColor = color; }
-	const glm::vec3& getColor() const { return mColor; }
 private:
 	static Ref<VertexArray> GenerateVA()
 	{
@@ -217,8 +199,6 @@ private:
 
 		return va;
 	}
-private:
-	glm::vec3 mColor;
 private:
 	static Ref<VertexArray> sVA;
 };
@@ -391,8 +371,7 @@ void Application::run()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Cube cube(glm::vec3(1.0f));
-		cube.render();
+		Cube::Render();
 	}
 
 	// then let OpenGL generate mipmaps from first mip face (combatting visible dots artifact)
@@ -432,8 +411,7 @@ void Application::run()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Cube cube(glm::vec3(1.0f));
-		cube.render();
+		Cube::Render();
 	}
 
 	// pbr: create a pre-filter cubemap, and re-scale capture FBO to pre-filter scale.
@@ -477,8 +455,7 @@ void Application::run()
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			Cube cube(glm::vec3(1.0f));
-			cube.render();
+			Cube::Render();
 		}
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -565,8 +542,7 @@ void Application::run()
 					-2.0f
 				));
 				pbrShader->setMat4("model", model);
-				Sphere sphere(glm::vec3(1.0f));
-				sphere.render();
+				Sphere::Render();
 			}
 		}
 
@@ -584,8 +560,7 @@ void Application::run()
 			model = glm::translate(model, newPos);
 			model = glm::scale(model, glm::vec3(0.5f));
 			pbrShader->setMat4("model", model);
-			Sphere sphere(glm::vec3(1.0f));
-			sphere.render();
+			Sphere::Render();
 		}
 
 		// render skybox (render as last to prevent overdraw)
@@ -593,8 +568,7 @@ void Application::run()
 		backgroundShader->setMat4("view", view);
 		backgroundShader->setMat4("projection", projection);
 		glBindTextureUnit(0, envCubemap);
-		Cube cube(glm::vec3(1.0f));
-		cube.render();
+		Cube::Render();
 
 		mWindow->onUpdate();
 	}
