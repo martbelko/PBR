@@ -34,11 +34,13 @@ public:
 
 	static void Render()
 	{
+		if (sVA == nullptr)
+			sVA = GenerateVA();
 		sVA->bind();
 		glDrawElements(GL_TRIANGLE_STRIP, sVA->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 	}
 private:
-	static Ref<VertexArray> GenerateSphereVA()
+	static Ref<VertexArray> GenerateVA()
 	{
 		Ref<VertexArray> va = VertexArray::Create();
 
@@ -137,6 +139,8 @@ public:
 
 	static void Render()
 	{
+		if (sVA == nullptr)
+			sVA = GenerateVA();
 		sVA->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
