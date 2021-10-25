@@ -513,7 +513,7 @@ void Application::run()
 	glfwGetFramebufferSize(mWindow->getNativeWindow(), &scrWidth, &scrHeight);
 	glViewport(0, 0, scrWidth, scrHeight);
 
-	// render loop
+	// main loop
 	// -----------
 	while (!mWindow->shouldClose())
 	{
@@ -593,14 +593,8 @@ void Application::run()
 		backgroundShader->setMat4("view", view);
 		backgroundShader->setMat4("projection", projection);
 		glBindTextureUnit(0, envCubemap);
-		//glBindTextureUnit(0, irradianceMap); // display irradiance map
-		//glBindTextureUnit(0, prefilterMap); // display prefilter map
 		Cube cube(glm::vec3(1.0f));
 		cube.render();
-
-		// render BRDF map to screen
-		// brdfShader->bind();
-		// renderQuad();
 
 		mWindow->onUpdate();
 	}
