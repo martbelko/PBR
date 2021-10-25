@@ -207,16 +207,21 @@ private:
 	static Ref<VertexArray> sVA;
 };
 
-Ref<VertexArray> Sphere::sVA = nullptr;
-Ref<VertexArray> Cube::sVA = nullptr;
-
-// renderQuad() renders a 1x1 XY quad in NDC
-// -----------------------------------------
-unsigned int quadVAO = 0;
-unsigned int quadVBO;
-void renderQuad()
+class Quad
 {
-	if (quadVAO == 0)
+public:
+	Quad() = delete;
+
+	// Renders a 1x1 XY quad in NDC
+	static void Render()
+	{
+		if (sVA == nullptr)
+			sVA = GenerateVA();
+		sVA->bind();
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	}
+private:
+	static Ref<VertexArray> GenerateVA()
 	{
 		float quadVertices[] = {
 			// positions        // texture Coords
@@ -225,21 +230,27 @@ void renderQuad()
 			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
 			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 		};
-		// setup plane VAO
-		glGenVertexArrays(1, &quadVAO);
-		glGenBuffers(1, &quadVBO);
-		glBindVertexArray(quadVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+		auto vb = VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+		BufferLayout vbLayout = {
+			{ ShaderDataType::Float3 },
+			{ ShaderDataType::Float2 }
+		};
+
+		vb->setLayout(vbLayout);
+
+		auto va = VertexArray::Create();
+		va = VertexArray::Create();
+		va->addVertexBuffer(vb);
+		return va;
 	}
-	glBindVertexArray(quadVAO);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);
-}
+private:
+	static Ref<VertexArray> sVA;
+};
+
+Ref<VertexArray> Sphere::sVA = nullptr;
+Ref<VertexArray> Cube::sVA = nullptr;
+Ref<VertexArray> Quad::sVA = nullptr;
 
 Application::Application(const std::string& name)
 {
@@ -485,7 +496,7 @@ void Application::run()
 	glViewport(0, 0, size, size);
 	brdfShader->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderQuad();
+	Quad::Render();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -614,6 +625,14 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 
 bool Application::onMouseMoved(MouseMovedEvent& e)
 {
+	if (mFirstMouse)
+	{
+		lastX = e.getX();
+		lastY = e.getY();
+
+		mFirstMouse = false;
+	}
+
 	float xoffset = e.getX() - lastX;
 	float yoffset = lastY - e.getY(); // reversed since y-coordinates go from bottom to top
 

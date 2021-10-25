@@ -47,10 +47,10 @@ private:
 	float mLastFrameTime = 0.0f;
 
 	Camera mCamera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-	float lastX = DEFAULT_WIDTH / 2.0f;
-	float lastY = DEFAULT_HEIGHT / 2.0f;
+	float lastX;
+	float lastY;
 
-	bool mSimple = false;
+	bool mFirstMouse = true;
 private:
 	static Application* sInstance;
 
