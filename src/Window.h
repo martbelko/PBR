@@ -26,6 +26,7 @@ public:
 	void setShouldClose(bool shouldClose = true) const;
 	bool shouldClose() const;
 
+	void enableCursor() const;
 	void disableCursor() const;
 
 	void setTitle(const std::string& title);

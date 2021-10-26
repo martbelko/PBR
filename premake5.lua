@@ -51,10 +51,12 @@ workspace "PBRApp"
 	IncludeDir["Glad"] = "%{wks.location}/vendor/Glad/include"
 	IncludeDir["glm"] = "%{wks.location}/vendor/glm"
 	IncludeDir["stb_image"] = "%{wks.location}/vendor/stb_image"
+	IncludeDir["ImGUI"] = "%{wks.location}/vendor/imgui"
 
 	group "Dependencies"
 		include "vendor/GLFW"
 		include "vendor/Glad"
+		include "vendor/imgui"
 	group ""
 
 project "PBRApp"
@@ -77,14 +79,16 @@ project "PBRApp"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.ImGUI}"
 	}
 
 	links
 	{
 		"GLFW",
 		"opengl32.lib",
-		"Glad"
+		"Glad",
+		"imgui"
 	}
 
 	defines

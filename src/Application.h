@@ -5,16 +5,11 @@
 #include <glm/glm.hpp>
 
 #include "Timestep.h"
+#include "LayerStack.h"
+#include "Window.h"
 
-#include "Renderer/Camera.h"
-
-class Window;
 class Event;
-
-class WindowResizeEvent;
-class MouseScrolledEvent;
-class MouseMovedEvent;
-class KeyPressedEvent;
+class ImGUILayer;
 
 class Application
 {
@@ -34,26 +29,13 @@ public:
 public:
 	static Application& Get() { return *sInstance; }
 private:
-	void processInput(Timestep timestep);
-
 	void onEvent(Event& e);
-
-	bool onWindowResize(WindowResizeEvent& e);
-
-	bool onMouseMoved(MouseMovedEvent& e);
-	bool onMouseScrolled(MouseScrolledEvent& e);
 private:
 	Window* mWindow;
 	float mLastFrameTime = 0.0f;
 
-	Camera mCamera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-	float lastX;
-	float lastY;
-
-	bool mFirstMouse = true;
+	LayerStack mLayerStack;
+	ImGUILayer* mImGuiLayer;
 private:
 	static Application* sInstance;
-
-	static constexpr int DEFAULT_WIDTH = 1280;
-	static constexpr int DEFAULT_HEIGHT = 720;
 };
