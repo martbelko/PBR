@@ -10,8 +10,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <stb_image.h>
-
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -37,7 +35,6 @@ class Quad
 public:
 	Quad() = delete;
 
-	// Renders a 1x1 XY quad in NDC
 	static void Render()
 	{
 		if (sVA == nullptr)
@@ -101,6 +98,19 @@ void MainLayer::OnUpdate(Timestep ts)
 
 void MainLayer::OnImGuiRender()
 {
+	if (mShowCursor)
+	{
+		ImGui::Begin("Option");
+		{
+			float cameraSpeed = mCamera.GetSpeed();
+			float cameraSens = mCamera.GetMouseSensitivity();
+			if (ImGui::DragFloat("Camera speed", &cameraSpeed, 0.1f, 0.01f, 1000.0f));
+				mCamera.SetSpeed(cameraSpeed);
+			if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
+				mCamera.SetMouseSensitivity(cameraSens);
+		}
+		ImGui::End();
+	}
 }
 
 void MainLayer::ProcessInput(Timestep ts)
