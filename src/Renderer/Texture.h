@@ -10,15 +10,15 @@ public:
 	Texture(const std::string& path);
 	~Texture();
 
-	uint32_t getWidth() const { return mWidth; }
-	uint32_t getHeight() const { return mHeight; }
-	uint32_t getRendererID() const { return mRendererID; }
+	uint32_t GetWidth() const { return mWidth; }
+	uint32_t GetHeight() const { return mHeight; }
+	uint32_t GetRendererID() const { return mRendererID; }
 
-	void setData(void* data, uint32_t size);
+	void SetData(void* data, uint32_t size);
 
-	void bind(uint32_t slot = 0) const;
+	void Bind(uint32_t slot = 0) const;
 
-	bool isLoaded() const { return mIsLoaded; }
+	bool IsLoaded() const { return mIsLoaded; }
 
 	bool operator==(const Texture& other)
 	{

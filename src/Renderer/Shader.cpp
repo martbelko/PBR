@@ -85,94 +85,94 @@ std::string Shader::ReadFile(const std::string& filepath)
 	return result;
 }
 
-void Shader::bind() const
+void Shader::Bind() const
 {
 	glUseProgram(mRendererID);
 }
 
-void Shader::unbind() const
+void Shader::Unbind()
 {
 	glUseProgram(0);
 }
 
-void Shader::setInt(const std::string& name, int value)
+void Shader::SetInt(const std::string& name, int value)
 {
-	uploadUniformInt(name, value);
+	UploadUniformInt(name, value);
 }
 
-void Shader::setIntArray(const std::string& name, int* values, uint32_t count)
+void Shader::SetIntArray(const std::string& name, int* values, uint32_t count)
 {
-	uploadUniformIntArray(name, values, count);
+	UploadUniformIntArray(name, values, count);
 }
 
-void Shader::setFloat(const std::string& name, float value)
+void Shader::SetFloat(const std::string& name, float value)
 {
-	uploadUniformFloat(name, value);
+	UploadUniformFloat(name, value);
 }
 
-void Shader::setFloat2(const std::string& name, const glm::vec2& value)
+void Shader::SetFloat2(const std::string& name, const glm::vec2& value)
 {
-	uploadUniformFloat2(name, value);
+	UploadUniformFloat2(name, value);
 }
 
-void Shader::setFloat3(const std::string& name, const glm::vec3& value)
+void Shader::SetFloat3(const std::string& name, const glm::vec3& value)
 {
-	uploadUniformFloat3(name, value);
+	UploadUniformFloat3(name, value);
 }
 
-void Shader::setFloat4(const std::string& name, const glm::vec4& value)
+void Shader::SetFloat4(const std::string& name, const glm::vec4& value)
 {
-	uploadUniformFloat4(name, value);
+	UploadUniformFloat4(name, value);
 }
 
-void Shader::setMat4(const std::string& name, const glm::mat4& value)
+void Shader::SetMat4(const std::string& name, const glm::mat4& value)
 {
-	uploadUniformMat4(name, value);
+	UploadUniformMat4(name, value);
 }
 
-void Shader::uploadUniformInt(const std::string& name, int value)
+void Shader::UploadUniformInt(const std::string& name, int value)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform1i(location, value);
 }
 
-void Shader::uploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+void Shader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform1iv(location, count, values);
 }
 
-void Shader::uploadUniformFloat(const std::string& name, float value)
+void Shader::UploadUniformFloat(const std::string& name, float value)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform1f(location, value);
 }
 
-void Shader::uploadUniformFloat2(const std::string& name, const glm::vec2& value)
+void Shader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform2f(location, value.x, value.y);
 }
 
-void Shader::uploadUniformFloat3(const std::string& name, const glm::vec3& value)
+void Shader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform3f(location, value.x, value.y, value.z);
 }
 
-void Shader::uploadUniformFloat4(const std::string& name, const glm::vec4& value)
+void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
-void Shader::uploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+void Shader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::uploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 {
 	GLint location = glGetUniformLocation(mRendererID, name.c_str());
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));

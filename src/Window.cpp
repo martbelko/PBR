@@ -127,74 +127,74 @@ Window::~Window()
 	glfwTerminate();
 }
 
-void Window::onUpdate() const
+void Window::OnUpdate() const
 {
 	glfwPollEvents();
 	glfwSwapBuffers(mWindow);
 }
 
-void Window::setShouldClose(bool shoudClose) const
+void Window::SetShouldClose(bool shoudClose) const
 {
 	glfwSetWindowShouldClose(mWindow, shoudClose);
 }
 
-bool Window::shouldClose() const
+bool Window::ShouldClose() const
 {
 	return glfwWindowShouldClose(mWindow);
 }
 
-void Window::enableCursor() const
+void Window::EnableCursor() const
 {
 	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void Window::disableCursor() const
+void Window::DisableCursor() const
 {
 	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void Window::setTitle(const std::string& title)
+void Window::SetTitle(const std::string& title)
 {
 	mTitle = title;
 	glfwSetWindowTitle(mWindow, title.data());
 }
 
-void Window::setWidth(int width) const
+void Window::SetWidth(int width) const
 {
-	glfwSetWindowSize(mWindow, width, getHeigt());
+	glfwSetWindowSize(mWindow, width, GetHeight());
 }
 
-void Window::setHeight(int height) const
+void Window::SetHeight(int height) const
 {
-	glfwSetWindowSize(mWindow, getWidth(), height);
+	glfwSetWindowSize(mWindow, GetWidth(), height);
 }
 
-void Window::setSize(int width, int height) const
+void Window::SetSize(int width, int height) const
 {
 	glfwSetWindowSize(mWindow, width, height);
 }
 
-const std::string& Window::getTitle() const
+const std::string& Window::GetTitle() const
 {
 	return mTitle;
 }
 
-std::pair<int, int> Window::getSize() const
+std::pair<int, int> Window::GetSize() const
 {
 	int width, height;
 	glfwGetWindowSize(mWindow, &width, &height);
 	return std::make_pair(width, height);
 }
 
-int Window::getWidth() const
+int Window::GetWidth() const
 {
-	auto [width, height] = getSize();
+	auto [width, height] = GetSize();
 	return width;
 }
 
-int Window::getHeigt() const
+int Window::GetHeight() const
 {
-	auto [width, height] = getSize();
+	auto [width, height] = GetSize();
 	return height;
 }
 

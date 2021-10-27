@@ -35,24 +35,24 @@ VertexArray::~VertexArray()
 	glDeleteVertexArrays(1, &mRendererID);
 }
 
-void VertexArray::bind() const
+void VertexArray::Bind() const
 {
 	glBindVertexArray(mRendererID);
 }
 
-void VertexArray::unbind() const
+void VertexArray::Unbind()
 {
 	glBindVertexArray(0);
 }
 
-void VertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 {
-	assert(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout!");
+	assert(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
 	glBindVertexArray(mRendererID);
-	vertexBuffer->bind();
+	vertexBuffer->Bind();
 
-	const auto& layout = vertexBuffer->getLayout();
+	const auto& layout = vertexBuffer->GetLayout();
 	for (const auto& element : layout)
 	{
 		switch (element.type)
@@ -67,7 +67,7 @@ void VertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 				element.getComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.type),
 				element.normalized ? GL_TRUE : GL_FALSE,
-				layout.getStride(),
+				layout.GetStride(),
 				(const void*)element.offset);
 			mVertexBufferIndex++;
 			break;
@@ -82,7 +82,7 @@ void VertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 			glVertexAttribIPointer(mVertexBufferIndex,
 				element.getComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.type),
-				layout.getStride(),
+				layout.GetStride(),
 				(const void*)element.offset);
 			mVertexBufferIndex++;
 			break;
@@ -98,7 +98,7 @@ void VertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 					count,
 					ShaderDataTypeToOpenGLBaseType(element.type),
 					element.normalized ? GL_TRUE : GL_FALSE,
-					layout.getStride(),
+					layout.GetStride(),
 					(const void*)(element.offset + sizeof(float) * count * i));
 				glVertexAttribDivisor(mVertexBufferIndex, 1);
 				mVertexBufferIndex++;
@@ -113,9 +113,9 @@ void VertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	mVertexBuffers.push_back(vertexBuffer);
 }
 
-void VertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 {
 	glBindVertexArray(mRendererID);
-	indexBuffer->bind();
+	indexBuffer->Bind();
 	mIndexBuffer = indexBuffer;
 }

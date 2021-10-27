@@ -13,14 +13,14 @@ public:
 	VertexArray();
 	~VertexArray();
 
-	void bind() const;
-	void unbind() const;
+	void Bind() const;
+	static void Unbind();
 
-	void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
-	void setIndexBuffer(const Ref<IndexBuffer>& indexBuffer);
+	void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
+	void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer);
 
-	const std::vector<Ref<VertexBuffer>>& getVertexBuffers() const { return mVertexBuffers; }
-	const Ref<IndexBuffer>& getIndexBuffer() const { return mIndexBuffer; }
+	const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return mVertexBuffers; }
+	const Ref<IndexBuffer>& GetIndexBuffer() const { return mIndexBuffer; }
 public:
 	static Ref<VertexArray> Create() { return CreateRef<VertexArray>(); }
 private:

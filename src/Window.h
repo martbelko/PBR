@@ -19,27 +19,27 @@ public:
 	Window& operator=(const Window&) = delete;
 	Window& operator=(Window&& window) = delete;
 
-	void onUpdate() const;
+	void OnUpdate() const;
 
-	void setEventCallback(const EventCallbackFn& callback) { mEventCallback = callback; }
+	void SetEventCallback(const EventCallbackFn& callback) { mEventCallback = callback; }
 
-	void setShouldClose(bool shouldClose = true) const;
-	bool shouldClose() const;
+	void SetShouldClose(bool shouldClose = true) const;
+	bool ShouldClose() const;
 
-	void enableCursor() const;
-	void disableCursor() const;
+	void EnableCursor() const;
+	void DisableCursor() const;
 
-	void setTitle(const std::string& title);
-	void setWidth(int width) const;
-	void setHeight(int height) const;
-	void setSize(int width, int height) const;
+	void SetTitle(const std::string& title);
+	void SetWidth(int width) const;
+	void SetHeight(int height) const;
+	void SetSize(int width, int height) const;
 
-	const std::string& getTitle() const;
-	std::pair<int, int> getSize() const;
-	int getWidth() const;
-	int getHeigt() const;
+	const std::string& GetTitle() const;
+	std::pair<int, int> GetSize() const;
+	int GetWidth() const;
+	int GetHeight() const;
 
-	GLFWwindow* getNativeWindow() const { return mWindow; }
+	GLFWwindow* GetNativeWindow() const { return mWindow; }
 private:
 	GLFWwindow* mWindow = nullptr;
 	std::string mTitle;

@@ -8,7 +8,7 @@
 class KeyEvent : public Event
 {
 public:
-	KeyCode getKeyCode() const { return mKeyCode; }
+	KeyCode GetKeyCode() const { return mKeyCode; }
 
 	EVENT_CLASS_CATEGORY(static_cast<int>(Category::Keyboard) | static_cast<int>(Category::Input))
 protected:
@@ -24,9 +24,9 @@ public:
 	KeyPressedEvent(const KeyCode keycode, const uint16_t repeatCount)
 		: KeyEvent(keycode), mRepeatCount(repeatCount) {}
 
-	uint16_t getRepeatCount() const { return mRepeatCount; }
+	uint16_t GetRepeatCount() const { return mRepeatCount; }
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "KeyPressedEvent: " << static_cast<int>(mKeyCode) << " (" << mRepeatCount << " repeats)";
@@ -44,7 +44,7 @@ public:
 	KeyReleasedEvent(const KeyCode keycode)
 		: KeyEvent(keycode) {}
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "KeyReleasedEvent: " << static_cast<int>(mKeyCode);
@@ -60,7 +60,7 @@ public:
 	KeyTypedEvent(const KeyCode keycode)
 		: KeyEvent(keycode) {}
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "KeyTypedEvent: " << static_cast<int>(mKeyCode);

@@ -37,7 +37,7 @@ void ImGUILayer::OnAttach()
 	SetDarkThemeColors();
 
 	Application& app = Application::Get();
-	GLFWwindow* window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
+	GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().getNativeWindow());
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -72,7 +72,7 @@ void ImGUILayer::End()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	Application& app = Application::Get();
-	io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeigt());
+	io.DisplaySize = ImVec2((float)app.GetWindow().getWidth(), (float)app.GetWindow().getHeigt());
 
 	// Rendering
 	ImGui::Render();

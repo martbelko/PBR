@@ -21,7 +21,7 @@ Application::Application(const std::string& name)
 
 	sInstance = this;
 	mWindow = new Window(name, 1280, 720);
-	mWindow->setEventCallback(BIND_EVENT_FN(Application::onEvent));
+	mWindow->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 	mImGuiLayer = new ImGUILayer();
 	mImGuiLayer->OnAttach();
@@ -33,9 +33,9 @@ Application::Application(const std::string& name)
 	mLayerStack.PushLayer(mImGuiLayer);
 }
 
-void Application::run()
+void Application::Run()
 {
-	while (!mWindow->shouldClose())
+	while (!mWindow->ShouldClose())
 	{
 		float timeMs = static_cast<float>(glfwGetTime()) * 1000.0f; // TODO: Use chrono instead of glfwGetTime()
 		Timestep timestep = timeMs - mLastFrameTime;
@@ -51,7 +51,7 @@ void Application::run()
 		}
 		mImGuiLayer->End();
 
-		mWindow->onUpdate();
+		mWindow->OnUpdate();
 	}
 }
 
@@ -60,7 +60,7 @@ Application::~Application()
 	delete mWindow;
 }
 
-void Application::onEvent(Event& e)
+void Application::OnEvent(Event& e)
 {
 	for (auto it = mLayerStack.rbegin(); it != mLayerStack.rend(); ++it)
 	{

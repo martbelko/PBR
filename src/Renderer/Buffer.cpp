@@ -21,17 +21,17 @@ VertexBuffer::~VertexBuffer()
 	glDeleteBuffers(1, &mRendererID);
 }
 
-void VertexBuffer::bind() const
+void VertexBuffer::Bind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mRendererID);
 }
 
-void VertexBuffer::unbind() const
+void VertexBuffer::Unbind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::setData(const void* data, uint32_t size)
+void VertexBuffer::SetData(const void* data, uint32_t size)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mRendererID);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
@@ -57,12 +57,12 @@ IndexBuffer::~IndexBuffer()
 	glDeleteBuffers(1, &mRendererID);
 }
 
-void IndexBuffer::bind() const
+void IndexBuffer::Bind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererID);
 }
 
-void IndexBuffer::unbind() const
+void IndexBuffer::Unbind()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

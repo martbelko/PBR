@@ -11,10 +11,10 @@ public:
 	MouseMovedEvent(const float x, const float y)
 		: mMouseX(x), mMouseY(y) {}
 
-	float getX() const { return mMouseX; }
-	float getY() const { return mMouseY; }
+	float GetX() const { return mMouseX; }
+	float GetY() const { return mMouseY; }
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "MouseMovedEvent: " << mMouseX << ", " << mMouseY;
@@ -33,13 +33,13 @@ public:
 	MouseScrolledEvent(const float xOffset, const float yOffset)
 		: mXOffset(xOffset), mYOffset(yOffset) {}
 
-	float getXOffset() const { return mXOffset; }
-	float getYOffset() const { return mYOffset; }
+	float GetXOffset() const { return mXOffset; }
+	float GetYOffset() const { return mYOffset; }
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
-		ss << "MouseScrolledEvent: " << getXOffset() << ", " << getYOffset();
+		ss << "MouseScrolledEvent: " << mXOffset << ", " << mYOffset;
 		return ss.str();
 	}
 
@@ -52,7 +52,7 @@ private:
 class MouseButtonEvent : public Event
 {
 public:
-	MouseCode getButton() const { return mButton; }
+	MouseCode GetButton() const { return mButton; }
 
 	EVENT_CLASS_CATEGORY(static_cast<int>(Category::Mouse) |
 		static_cast<int>(Category::Input) |
@@ -70,7 +70,7 @@ public:
 	MouseButtonPressedEvent(const MouseCode button)
 		: MouseButtonEvent(button) {}
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "MouseButtonPressedEvent: " << static_cast<int>(mButton);
@@ -86,7 +86,7 @@ public:
 	MouseButtonReleasedEvent(const MouseCode button)
 		: MouseButtonEvent(button) {}
 
-	std::string toString() const override
+	std::string ToString() const override
 	{
 		std::stringstream ss;
 		ss << "MouseButtonReleasedEvent: " << static_cast<int>(mButton);

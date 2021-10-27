@@ -39,7 +39,7 @@ public:
 	{
 		if (sVA == nullptr)
 			sVA = GenerateVA();
-		sVA->bind();
+		sVA->Bind();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 private:
@@ -57,11 +57,11 @@ private:
 			{ ShaderDataType::Float2 }
 		};
 
-		vb->setLayout(vbLayout);
+		vb->SetLayout(vbLayout);
 
 		auto va = VertexArray::Create();
 		va = VertexArray::Create();
-		va->addVertexBuffer(vb);
+		va->AddVertexBuffer(vb);
 		return va;
 	}
 private:
@@ -72,7 +72,7 @@ Ref<VertexArray> Quad::sVA = nullptr;
 
 void MainLayer::OnAttach()
 {
-	mWindow.disableCursor();
+	mWindow.DisableCursor();
 }
 
 void MainLayer::OnUpdate(Timestep ts)
@@ -82,17 +82,16 @@ void MainLayer::OnUpdate(Timestep ts)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	uint32_t width = mWindow.getWidth();
-	uint32_t height = mWindow.getHeigt();
-	glm::mat4 projection = glm::perspective(glm::radians(mCamera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
-	glm::mat4 view = mCamera.getViewMatrix();
+	auto[width, height] = mWindow.GetSize();
+	glm::mat4 projection = glm::perspective(glm::radians(mCamera.GetZoom()), (float)width / (float)height, 0.1f, 100.0f);
+	glm::mat4 view = mCamera.GetViewMatrix();
 	glm::mat4 projview = projection * view;
 
-	mRaytraceShader->bind();
-	mRaytraceShader->setFloat2("uResolution", glm::vec2(width, height));
-	mRaytraceShader->setFloat("uNear", 0.1f);
-	mRaytraceShader->setFloat("uFar", 100.0f);
-	mRaytraceShader->setMat4("uInvProjView", glm::inverse(projview));
+	mRaytraceShader->Bind();
+	mRaytraceShader->SetFloat2("uResolution", glm::vec2(width, height));
+	mRaytraceShader->SetFloat("uNear", 0.1f);
+	mRaytraceShader->SetFloat("uFar", 100.0f);
+	mRaytraceShader->SetMat4("uInvProjView", glm::inverse(projview));
 	Quad::Render();
 }
 
@@ -118,13 +117,13 @@ void MainLayer::ProcessInput(Timestep ts)
 	if (!mShowCursor)
 	{
 		if (Input::IsKeyPressed(KeyCode::W))
-			mCamera.processKeyboard(Camera::Direction::Forward, ts);
+			mCamera.ProcessKeyboard(Camera::Direction::Forward, ts);
 		else if (Input::IsKeyPressed(KeyCode::S))
-			mCamera.processKeyboard(Camera::Direction::Backward, ts);
+			mCamera.ProcessKeyboard(Camera::Direction::Backward, ts);
 		if (Input::IsKeyPressed(KeyCode::A))
-			mCamera.processKeyboard(Camera::Direction::Left, ts);
+			mCamera.ProcessKeyboard(Camera::Direction::Left, ts);
 		else if (Input::IsKeyPressed(KeyCode::D))
-			mCamera.processKeyboard(Camera::Direction::Right, ts);
+			mCamera.ProcessKeyboard(Camera::Direction::Right, ts);
 	}
 }
 
@@ -149,19 +148,19 @@ bool MainLayer::OnMouseMoved(MouseMovedEvent& e)
 	{
 		if (mFirstMouse)
 		{
-			lastX = e.getX();
-			lastY = e.getY();
+			lastX = e.GetX();
+			lastY = e.GetY();
 
 			mFirstMouse = false;
 		}
 
-		float xoffset = e.getX() - lastX;
-		float yoffset = lastY - e.getY(); // reversed since y-coordinates go from bottom to top
+		float xoffset = e.GetX() - lastX;
+		float yoffset = lastY - e.GetY(); // reversed since y-coordinates go from bottom to top
 
-		lastX = e.getX();
-		lastY = e.getY();
+		lastX = e.GetX();
+		lastY = e.GetY();
 
-		mCamera.processMouseMovement(xoffset, yoffset);
+		mCamera.ProcessMouseMovement(xoffset, yoffset);
 	}
 
 	return false;
@@ -170,7 +169,7 @@ bool MainLayer::OnMouseMoved(MouseMovedEvent& e)
 bool MainLayer::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	if (!mShowCursor)
-		mCamera.processMouseScroll(e.getYOffset());
+		mCamera.ProcessMouseScroll(e.GetYOffset());
 	return false;
 }
 
@@ -181,9 +180,9 @@ bool MainLayer::OnKeyPressed(KeyPressedEvent& e)
 		mShowCursor = !mShowCursor;
 		mFirstMouse = true;
 		if (mShowCursor)
-			mWindow.enableCursor();
+			mWindow.EnableCursor();
 		else
-			mWindow.disableCursor();
+			mWindow.DisableCursor();
 	}
 
 	return false;

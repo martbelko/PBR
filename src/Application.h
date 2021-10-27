@@ -23,13 +23,13 @@ public:
 	Application& operator=(const Application&) = delete;
 	Application& operator=(Application&&) = delete;
 
-	void run();
+	void Run();
 
-	Window& getWindow() const { return *mWindow; }
+	Window& GetWindow() const { return *mWindow; }
 public:
 	static Application& Get() { return *sInstance; }
 private:
-	void onEvent(Event& e);
+	void OnEvent(Event& e);
 private:
 	Window* mWindow;
 	float mLastFrameTime = 0.0f;

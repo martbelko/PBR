@@ -7,25 +7,25 @@ class Timer
 public:
 	Timer()
 	{
-		reset();
+		Reset();
 	}
 
-	void reset()
+	void Reset()
 	{
 		mStart = std::chrono::high_resolution_clock::now();
 	}
 
-	float elapsedSeconds()
+	float ElapsedSeconds()
 	{
 		return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - mStart).count();
 	}
 
-	float elapsedMs()
+	float ElapsedMs()
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - mStart).count();
 	}
 
-	float elapsedNs()
+	float ElapsedNs()
 	{
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - mStart).count();
 	}

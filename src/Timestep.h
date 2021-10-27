@@ -10,8 +10,8 @@ public:
 
 	operator float() const { return mTimeMs / 1000.0f; }
 
-	float getSeconds() const { return mTimeMs / 1000.0f; }
-	float getMilliseconds() const { return mTimeMs; }
+	float GetSeconds() const { return mTimeMs / 1000.0f; }
+	float GetMilliseconds() const { return mTimeMs; }
 private:
 	float mTimeMs;
 };

@@ -8,7 +8,7 @@
 int main()
 {
 	Application app("PBR App");
-	app.run();
+	app.Run();
 
 	return 0;
 }

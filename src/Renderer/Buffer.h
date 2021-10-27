@@ -78,18 +78,18 @@ public:
 	BufferLayout(std::initializer_list<BufferElement> elements)
 		: mElements(elements)
 	{
-		calculateOffsetsAndStride();
+		CalculateOffsetsAndStride();
 	}
 
-	uint32_t getStride() const { return mStride; }
-	const std::vector<BufferElement>& getElements() const { return mElements; }
+	uint32_t GetStride() const { return mStride; }
+	const std::vector<BufferElement>& GetElements() const { return mElements; }
 
 	std::vector<BufferElement>::iterator begin() { return mElements.begin(); }
 	std::vector<BufferElement>::iterator end() { return mElements.end(); }
 	std::vector<BufferElement>::const_iterator begin() const { return mElements.begin(); }
 	std::vector<BufferElement>::const_iterator end() const { return mElements.end(); }
 private:
-	void calculateOffsetsAndStride()
+	void CalculateOffsetsAndStride()
 	{
 		size_t offset = 0;
 		mStride = 0;
@@ -112,13 +112,13 @@ public:
 	VertexBuffer(const float* vertices, uint32_t size);
 	~VertexBuffer();
 
-	void bind() const;
-	void unbind() const;
+	void Bind() const;
+	static void Unbind();
 
-	void setData(const void* data, uint32_t size);
+	void SetData(const void* data, uint32_t size);
 
-	const BufferLayout& getLayout() const { return mLayout; }
-	void setLayout(const BufferLayout& layout) { mLayout = layout; }
+	const BufferLayout& GetLayout() const { return mLayout; }
+	void SetLayout(const BufferLayout& layout) { mLayout = layout; }
 public:
 	static Ref<VertexBuffer> Create(uint32_t size) { return CreateRef<VertexBuffer>(size); }
 	static Ref<VertexBuffer> Create(const float* vertices, uint32_t size) { return CreateRef<VertexBuffer>(vertices, size); }
@@ -133,10 +133,10 @@ public:
 	IndexBuffer(const uint32_t* indices, uint32_t count);
 	~IndexBuffer();
 
-	void bind() const;
-	void unbind() const;
+	void Bind() const;
+	static void Unbind();
 
-	uint32_t getCount() const { return mCount; }
+	uint32_t GetCount() const { return mCount; }
 public:
 	static Ref<IndexBuffer> Create(const uint32_t* indices, uint32_t count) { return CreateRef<IndexBuffer>(indices, count); }
 private:

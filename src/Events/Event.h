@@ -5,10 +5,10 @@
 #include "Base.h"
 
 #define EVENT_CLASS_TYPE(type) static Event::Type GetStaticType() { return type; }\
-                               virtual Event::Type getEventType() const override { return GetStaticType(); }\
-                               virtual const char* getName() const override { return #type; }
+                               virtual Event::Type GetEventType() const override { return GetStaticType(); }\
+                               virtual const char* GetName() const override { return #type; }
 
-#define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return static_cast<int>(category); }
+#define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
 
 class Event
 {
@@ -35,12 +35,12 @@ public:
 
 	bool handled = false;
 
-	virtual Type getEventType() const = 0;
-	virtual const char* getName() const = 0;
-	virtual int getCategoryFlags() const = 0;
-	virtual std::string toString() const { return getName(); }
+	virtual Type GetEventType() const = 0;
+	virtual const char* GetName() const = 0;
+	virtual int GetCategoryFlags() const = 0;
+	virtual std::string ToString() const { return GetName(); }
 
-	bool isInCategory(Category category) { return getCategoryFlags() & static_cast<int>(category); }
+	bool IsInCategory(Category category) { return GetCategoryFlags() & static_cast<int>(category); }
 };
 
 class EventDispatcher
@@ -52,7 +52,7 @@ public:
 	}
 
 	template<typename T, typename F>
-	bool dispatch(const F& func)
+	bool Dispatch(const F& func)
 	{
 		if (mEvent.getEventType() == T::GetStaticType())
 		{
@@ -68,5 +68,5 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, const Event& e)
 {
-	return os << e.toString();
+	return os << e.ToString();
 }

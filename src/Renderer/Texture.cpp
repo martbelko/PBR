@@ -76,14 +76,14 @@ Texture::~Texture()
 	glDeleteTextures(1, &mRendererID);
 }
 
-void Texture::setData(void* data, uint32_t size)
+void Texture::SetData(void* data, uint32_t size)
 {
 	uint32_t bpp = mDataFormat == GL_RGBA ? 4 : 3;
 	assert(size == mWidth * mHeight * bpp, "Data must be entire texture!");
 	glTextureSubImage2D(mRendererID, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
 }
 
-void Texture::bind(uint32_t slot) const
+void Texture::Bind(uint32_t slot) const
 {
 	glBindTextureUnit(slot, mRendererID);
 }
