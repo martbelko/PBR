@@ -17,7 +17,12 @@ public:
 
 	float getZoom() const { return mZoom; }
 	const glm::vec3& getPosition() const { return mPosition; }
+	const float GetSpeed() const { return mMovementSpeed; }
+	const float GetMouseSensitivity() const { return mMouseSensitivity; }
 	glm::mat4 getViewMatrix() const;
+
+	void SetSpeed(float speed) { mMovementSpeed = speed; }
+	void SetMouseSensitivity(float mouseSensitivity) { mMouseSensitivity = mouseSensitivity; }
 
 	void processKeyboard(Direction direction, float deltaTime);
 	void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
