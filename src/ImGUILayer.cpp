@@ -37,7 +37,7 @@ void ImGUILayer::OnAttach()
 	SetDarkThemeColors();
 
 	Application& app = Application::Get();
-	GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().getNativeWindow());
+	GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -56,8 +56,8 @@ void ImGUILayer::OnEvent(Event& e)
 	if (mBlockEvents)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		e.handled |= e.isInCategory(Event::Category::Mouse) & io.WantCaptureMouse;
-		e.handled |= e.isInCategory(Event::Category::Keyboard) & io.WantCaptureKeyboard;
+		e.handled |= e.IsInCategory(Event::Category::Mouse) & io.WantCaptureMouse;
+		e.handled |= e.IsInCategory(Event::Category::Keyboard) & io.WantCaptureKeyboard;
 	}
 }
 
@@ -72,7 +72,7 @@ void ImGUILayer::End()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	Application& app = Application::Get();
-	io.DisplaySize = ImVec2((float)app.GetWindow().getWidth(), (float)app.GetWindow().getHeigt());
+	io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 	// Rendering
 	ImGui::Render();

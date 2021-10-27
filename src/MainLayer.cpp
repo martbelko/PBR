@@ -130,15 +130,15 @@ void MainLayer::ProcessInput(Timestep ts)
 void MainLayer::OnEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.dispatch<MouseMovedEvent>(BIND_EVENT_FN(MainLayer::OnMouseMoved));
-	dispatcher.dispatch<KeyPressedEvent>(BIND_EVENT_FN(MainLayer::OnKeyPressed));
-	dispatcher.dispatch<MouseScrolledEvent>(BIND_EVENT_FN(MainLayer::OnMouseScrolled));
-	dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(MainLayer::OnWindowResize));
+	dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_FN(MainLayer::OnMouseMoved));
+	dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(MainLayer::OnKeyPressed));
+	dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(MainLayer::OnMouseScrolled));
+	dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(MainLayer::OnWindowResize));
 }
 
 bool MainLayer::OnWindowResize(WindowResizeEvent& e)
 {
-	glViewport(0, 0, e.getWidth(), e.getHeight());
+	glViewport(0, 0, e.GetWidth(), e.GetHeight());
 	return false;
 }
 
@@ -175,7 +175,7 @@ bool MainLayer::OnMouseScrolled(MouseScrolledEvent& e)
 
 bool MainLayer::OnKeyPressed(KeyPressedEvent& e)
 {
-	if (e.getKeyCode() == KeyCode::Escape)
+	if (e.GetKeyCode() == KeyCode::Escape)
 	{
 		mShowCursor = !mShowCursor;
 		mFirstMouse = true;
