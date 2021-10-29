@@ -73,6 +73,46 @@ Ref<VertexArray> Quad::sVA = nullptr;
 void MainLayer::OnAttach()
 {
 	mWindow.DisableCursor();
+
+	glEnable(GL_DEPTH_TEST);
+
+	float spheres[] = {
+		// R Transparency Reflect | Position | Surface color | Emission color
+		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
+	};
+
+	float spherePositions[] = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, -4.0f, 0.0f,
+		2.0f, 2.0f, -1.0f, 0.0f,
+		-2.0f, -2.0f, -1.0f, 0.0f
+	};
+
+	float colors[] = {
+		1.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f
+	};
+
+	float emissions[] = {
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f
+	};
+
+	GLuint ssbo;
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(spheres), spheres, GL_STATIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+
+	mRaytraceShader->Bind();
+	mRaytraceShader->SetFloat3("uLightPosition", glm::vec3(5.0f, 5.0f, 5.0f));
 }
 
 void MainLayer::OnUpdate(Timestep ts)
@@ -87,7 +127,6 @@ void MainLayer::OnUpdate(Timestep ts)
 	glm::mat4 view = mCamera.GetViewMatrix();
 	glm::mat4 projview = projection * view;
 
-	mRaytraceShader->Bind();
 	mRaytraceShader->SetFloat2("uResolution", glm::vec2(width, height));
 	mRaytraceShader->SetFloat("uNear", 0.1f);
 	mRaytraceShader->SetFloat("uFar", 100.0f);
@@ -99,7 +138,7 @@ void MainLayer::OnImGuiRender()
 {
 	if (mShowCursor)
 	{
-		ImGui::Begin("Option");
+		ImGui::Begin("Options");
 		{
 			float cameraSpeed = mCamera.GetSpeed();
 			float cameraSens = mCamera.GetMouseSensitivity();
@@ -107,6 +146,10 @@ void MainLayer::OnImGuiRender()
 				mCamera.SetSpeed(cameraSpeed);
 			if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
 				mCamera.SetMouseSensitivity(cameraSens);
+			if (ImGui::Button("Reset camera position to light position"))
+			{
+				mCamera.SetPosition(glm::vec3(5.0f, 5.0f, 5.0f));
+			}
 		}
 		ImGui::End();
 	}

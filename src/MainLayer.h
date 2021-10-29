@@ -55,4 +55,7 @@ private:
 	bool mShowCursor = false;
 
 	Ref<Shader> mRaytraceShader = Shader::CreateFromFile("assets/shaders/Raytrace.vert", "assets/shaders/Raytrace.frag");
+
+	glm::vec3 mSpherePos = glm::vec3(0.0f, 0.0f, -5.0f);
+	float mSphereRadius = 1.0f;
 };
