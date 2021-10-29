@@ -23,6 +23,7 @@ public:
 
 	void SetSpeed(float speed) { mMovementSpeed = speed; }
 	void SetMouseSensitivity(float mouseSensitivity) { mMouseSensitivity = mouseSensitivity; }
+	void SetPosition(const glm::vec3& position);
 
 	void ProcessKeyboard(Direction direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
