@@ -6,15 +6,15 @@ in vec3 vRay;
 uniform vec2 uResolution;
 uniform vec3 uLightPosition;
 
-struct BufferSphere
+struct BufferSphere // std430 layout
 {
-	vec4 properties;
+	vec4 properties; // x = radius, y = transparency, z = reflection
 	vec4 center;
 	vec4 surfaceColor;
 	vec4 emissionColor;
 };
 
-struct Sphere
+struct Sphere // Internal struct
 {
 	float radius;
 	float transparency;
@@ -96,7 +96,7 @@ struct Intersection
 
 const float MAX_DISTANCE = 1000000000.0;
 
-Intersection PerformRayTraceScene(vec3 rayOrigin, vec3 rayDir)
+Intersection FindNearestIntersection(vec3 rayOrigin, vec3 rayDir)
 {
 	Intersection intersection;
 	intersection.sphereIndex = -2;
@@ -115,16 +115,24 @@ Intersection PerformRayTraceScene(vec3 rayOrigin, vec3 rayDir)
 		}
 	}
 
+	float lightT = sphere(rayOrigin, rayDir, uLightPosition, 0.5);
+	if (lightT > -0.001 && lightT < intersection.distance)
+	{
+		intersection.distance = lightT;
+		intersection.hitPoint = rayOrigin + lightT * rayDir;
+		intersection.sphereIndex = -1;
+	}
+
 	return intersection;
 }
 
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
 	vec3 fragColor = spheres[intersection.sphereIndex].surfaceColor;
-	/*vec3 shadowRay = normalize(uLightPosition - intersection.hitPoint);
-	Intersection nextInt = PerformRayTraceScene(intersection.hitPoint, shadowRay);
+	vec3 shadowRay = normalize(uLightPosition - intersection.hitPoint);
+	Intersection nextInt = FindNearestIntersection(intersection.hitPoint, shadowRay);
 	if (nextInt.sphereIndex >= 0)
-		fragColor *= 0.5;*/
+		fragColor *= 0.5;
 	return fragColor;
 }
 
@@ -132,7 +140,7 @@ const int MAX_RAY_DEPTH = 3;
 
 vec3 RecursiveRayTrace(vec3 ro, vec3 rd)
 {
-	Intersection intersection = PerformRayTraceScene(ro, rd);
+	Intersection intersection = FindNearestIntersection(ro, rd);
 	if (intersection.sphereIndex == -2)
 	{
 		return vec3(0.0, 0.0, 0.0);
@@ -143,28 +151,9 @@ vec3 RecursiveRayTrace(vec3 ro, vec3 rd)
 	}
 }
 
-vec3 iterativeTrace(vec3 rayorig, vec3 raydir)
-{
-	int depth = 0;
-	vec3 reflection;
-	vec3 refraction;
-	while (true)
-	{
-		Intersection nearIntersection = PerformRayTraceScene(rayorig, raydir);
-		float tnear = nearIntersection.distance;
-		// if there's no intersection return black or background color
-		if (nearIntersection.sphereIndex < 0)
-			return vec3(0);
-
-
-
-		++depth;
-	}
-}
-
 vec3 trace(vec3 rayorig, vec3 raydir, int depth)
 {
-	Intersection nearIntersection = PerformRayTraceScene(rayorig, raydir);
+	Intersection nearIntersection = FindNearestIntersection(rayorig, raydir);
 	float tnear = nearIntersection.distance;
 	// if there's no intersection return black or background color
 	if (nearIntersection.sphereIndex < 0)
@@ -217,12 +206,12 @@ vec3 trace(vec3 rayorig, vec3 raydir, int depth)
 			{
 				// this is a light
 				vec3 transmission = vec3(1);
-				vec3 lightDirection = normalize(spheres[i].center.xyz - phit);
+				vec3 lightDirection = normalize(spheres[i].center - phit);
 				for (uint j = 0; j < 4; ++j)
 				{
 					if (i != j)
 					{
-						if (sphere(phit + nhit * bias, lightDirection, spheres[j].center.xyz, 1.0) >= 0.0)
+						if (sphere(phit + nhit * bias, lightDirection, spheres[j].center, 1.0) >= 0.0)
 						{
 							transmission = vec3(0);
 							break;
@@ -244,5 +233,12 @@ void main()
 	vec3 ro = vOrigin;
 	vec3 rd = normalize(vRay);
 
-	oFragColor = vec4(trace(ro, rd, 0), 1.0);
+	// oFragColor = vec4(trace(ro, rd, 0), 1.0);
+	Intersection intersection = FindNearestIntersection(ro, rd);
+	if (intersection.sphereIndex >= 0) // Hit sphere object
+		oFragColor = vec4(GetFragColorFromIntersection(intersection), 1.0);
+	else if (intersection.sphereIndex == -1) // Hit light
+		oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+	else // Hit nothing
+		oFragColor = vec4(0.1, 0.1, 0.1, 1.0);
 }

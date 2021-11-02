@@ -84,27 +84,6 @@ void MainLayer::OnAttach()
 		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
 	};
 
-	float spherePositions[] = {
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, -4.0f, 0.0f,
-		2.0f, 2.0f, -1.0f, 0.0f,
-		-2.0f, -2.0f, -1.0f, 0.0f
-	};
-
-	float colors[] = {
-		1.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f
-	};
-
-	float emissions[] = {
-		0.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f
-	};
-
 	GLuint ssbo;
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
