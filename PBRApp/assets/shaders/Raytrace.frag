@@ -48,11 +48,11 @@ Sphere[4] ParseBufferSpheres()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		spheres[i].radius = bufferSpheres[0].properties.x;
-		spheres[i].transparency = bufferSpheres[0].properties.y;
-		spheres[i].reflection = bufferSpheres[0].properties.z;
-		spheres[i].center = bufferSpheres[0].center.xyz;
-		spheres[i].surfaceColor = bufferSpheres[0].surfaceColor.rgb;
+		spheres[i].radius = bufferSpheres[i].properties.x;
+		spheres[i].transparency = bufferSpheres[i].properties.y;
+		spheres[i].reflection = bufferSpheres[i].properties.z;
+		spheres[i].center = bufferSpheres[i].center.xyz;
+		spheres[i].surfaceColor = bufferSpheres[i].surfaceColor.rgb;
 	}
 
 	return spheres;
