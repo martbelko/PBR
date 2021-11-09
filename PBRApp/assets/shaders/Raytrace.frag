@@ -46,29 +46,14 @@ Sphere[4] ParseBufferSpheres()
 {
 	Sphere spheres[4];
 
-	spheres[0].radius = bufferSpheres[0].properties.x;
-	spheres[0].transparency = bufferSpheres[0].properties.y;
-	spheres[0].reflection = bufferSpheres[0].properties.z;
-	spheres[0].center = bufferSpheres[0].center.xyz;
-	spheres[0].surfaceColor = bufferSpheres[0].surfaceColor.rgb;
-
-	spheres[1].radius = bufferSpheres[1].properties.x;
-	spheres[1].transparency = bufferSpheres[1].properties.y;
-	spheres[1].reflection = bufferSpheres[1].properties.z;
-	spheres[1].center = bufferSpheres[1].center.xyz;
-	spheres[1].surfaceColor = bufferSpheres[1].surfaceColor.rgb;
-
-	spheres[2].radius = bufferSpheres[2].properties.x;
-	spheres[2].transparency = bufferSpheres[2].properties.y;
-	spheres[2].reflection = bufferSpheres[2].properties.z;
-	spheres[2].center = bufferSpheres[2].center.xyz;
-	spheres[2].surfaceColor = bufferSpheres[2].surfaceColor.rgb;
-
-	spheres[3].radius = bufferSpheres[3].properties.x;
-	spheres[3].transparency = bufferSpheres[3].properties.y;
-	spheres[3].reflection = bufferSpheres[3].properties.z;
-	spheres[3].center = bufferSpheres[3].center.xyz;
-	spheres[3].surfaceColor = bufferSpheres[3].surfaceColor.rgb;
+	for (int i = 0; i < 4; ++i)
+	{
+		spheres[i].radius = bufferSpheres[0].properties.x;
+		spheres[i].transparency = bufferSpheres[0].properties.y;
+		spheres[i].reflection = bufferSpheres[0].properties.z;
+		spheres[i].center = bufferSpheres[0].center.xyz;
+		spheres[i].surfaceColor = bufferSpheres[0].surfaceColor.rgb;
+	}
 
 	return spheres;
 }
