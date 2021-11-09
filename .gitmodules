@@ -1,9 +1,9 @@
-[submodule "vendor/GLFW"]
-	path = vendor/GLFW
-	url = https://github.com/martbelko/glfw
-[submodule "vendor/glm"]
-	path = vendor/glm
+[submodule "PBRApp/vendor/glm"]
+	path = PBRApp/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "vendor/imgui"]
-	path = vendor/imgui
-	url = https://github.com/martbelko/imgui
+[submodule "PBRApp/vendor/ImGui"]
+	path = PBRApp/vendor/ImGui
+	url = https://github.com/martbelko/ImGui/
+[submodule "PBRApp/vendor/GLFW"]
+	path = PBRApp/vendor/GLFW
+	url = https://github.com/martbelko/GLFW
