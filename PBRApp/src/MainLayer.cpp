@@ -77,11 +77,11 @@ void MainLayer::OnAttach()
 	glEnable(GL_DEPTH_TEST);
 
 	float spheres[] = {
-		// R Transparency Reflect | Position | Surface color | Emission color
-		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
+		// Radius Transparency Reflect Unused | Position | Surface color
+		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f
 	};
 
 	GLuint ssbo;
@@ -106,7 +106,6 @@ void MainLayer::OnUpdate(Timestep ts)
 	glm::mat4 view = mCamera.GetViewMatrix();
 	glm::mat4 projview = projection * view;
 
-	mRaytraceShader->SetFloat2("uResolution", glm::vec2(width, height));
 	mRaytraceShader->SetFloat("uNear", 0.1f);
 	mRaytraceShader->SetFloat("uFar", 100.0f);
 	mRaytraceShader->SetMat4("uInvProjView", glm::inverse(projview));
