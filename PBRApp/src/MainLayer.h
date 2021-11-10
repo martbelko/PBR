@@ -58,4 +58,6 @@ private:
 
 	glm::vec3 mSpherePos = glm::vec3(0.0f, 0.0f, -5.0f);
 	float mSphereRadius = 1.0f;
+
+	uint32_t mCubemap;
 };

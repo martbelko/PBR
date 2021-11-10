@@ -10,6 +10,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <stb_image.h>
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -70,6 +72,38 @@ private:
 
 Ref<VertexArray> Quad::sVA = nullptr;
 
+static uint32_t LoadCubemap(const std::vector<std::string>& faces)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+			);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
+}
+
 void MainLayer::OnAttach()
 {
 	mWindow.DisableCursor();
@@ -92,6 +126,17 @@ void MainLayer::OnAttach()
 
 	mRaytraceShader->Bind();
 	mRaytraceShader->SetFloat3("uLightPosition", glm::vec3(5.0f, 5.0f, 5.0f));
+
+	std::vector<std::string> faces = {
+		"assets/textures/skybox/right.jpg",
+		"assets/textures/skybox/left.jpg",
+		"assets/textures/skybox/top.jpg",
+		"assets/textures/skybox/bottom.jpg",
+		"assets/textures/skybox/front.jpg",
+		"assets/textures/skybox/back.jpg"
+	};
+	mCubemap = LoadCubemap(faces);
+
 }
 
 void MainLayer::OnUpdate(Timestep ts)
@@ -109,6 +154,10 @@ void MainLayer::OnUpdate(Timestep ts)
 	mRaytraceShader->SetFloat("uNear", 0.1f);
 	mRaytraceShader->SetFloat("uFar", 100.0f);
 	mRaytraceShader->SetMat4("uInvProjView", glm::inverse(projview));
+
+	mRaytraceShader->SetInt("uCubemap", 0);
+	glBindTextureUnit(0, mCubemap);
+
 	Quad::Render();
 }
 

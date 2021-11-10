@@ -4,6 +4,7 @@ in vec3 vOrigin;
 in vec3 vRay;
 
 uniform vec3 uLightPosition;
+uniform samplerCube uCubemap;
 
 struct BufferSphere // std430 layout
 {
@@ -61,7 +62,7 @@ Sphere[4] ParseBufferSpheres()
 
 Sphere[4] spheres;
 
-const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+const vec3 lightColor = vec3(1.0, 0.0, 1.0);
 const float lightPower = 40.0;
 const float screenGamma = 2.2;
 
@@ -124,6 +125,15 @@ Intersection FindNearestIntersection(Ray ray)
 // Blinn-Phong + Shadows
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
+	if (intersection.sphereIndex == -1)
+		return vec3(1.0, 0.0, 0.0);
+	else if (intersection.sphereIndex == -2)
+		return texture(uCubemap, intersection.ray.dir).rgb;
+	else if (intersection.sphereIndex < -2)
+		return vec3(0.0);
+	else
+		return spheres[intersection.sphereIndex].surfaceColor;
+
 	// Blinn-Phong + Shadows
 	vec3 color = spheres[intersection.sphereIndex].surfaceColor;
 	vec3 ambient = 0.05 * color;
@@ -133,11 +143,10 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 	vec3 lightDir = uLightPosition - intersection.hitPoint;
 	float distance = length(lightDir);
 	distance = distance * distance;
-	lightDir = normalize(lightDir); // Optimize?
+	lightDir = normalize(lightDir);
 
 	vec3 normal = intersection.normal;
-	float dotProd = dot(lightDir, normal);
-	float diff = max(dotProd, 0.0);
+	float diff = max(dot(lightDir, normal), 0.0);
 	if (diff > 0.0)
 	{
 		diffuse = color * diff * lightColor * lightPower / distance;
@@ -157,11 +166,82 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 	Intersection lightIntersection = FindNearestIntersection(ray);
 	if (intersection.sphereIndex != lightIntersection.sphereIndex && lightIntersection.sphereIndex >= 0)
 	{
-		diffuse = max(dot(-lightDir, normal), 0.0) * color;
+		diffuse = vec3(0);
 		specular = vec3(0);
 	}
 
 	return ambient + diffuse + specular;
+}
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+	return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
+#define DEPTH 3
+vec3 trace(Ray primaryRay)
+{
+	Intersection[7] gIntersections;
+	vec3 gColors[DEPTH];
+
+	// Generate all intersections
+	{
+		gIntersections[0] = FindNearestIntersection(primaryRay);
+		int pushIntersectionIndex = 1;
+		int currIntersectionIndex = 0;
+		while (currIntersectionIndex < DEPTH)
+		{
+			Intersection intersection = gIntersections[currIntersectionIndex];
+			if (intersection.sphereIndex < 0) // Ray hits nothing or light
+			{
+				gIntersections[pushIntersectionIndex].sphereIndex = -3;
+				gIntersections[pushIntersectionIndex + 1].sphereIndex = -3;
+			}
+			else
+			{
+				vec3 reflectDir = reflect(gIntersections[currIntersectionIndex].ray.dir, intersection.normal);
+				vec3 refractDir = refract(gIntersections[currIntersectionIndex].ray.dir, intersection.normal, 0.5);
+
+				Ray reflectRay = Ray(intersection.hitPoint, reflectDir);
+				Ray refractRay = Ray(intersection.hitPoint, refractDir);
+				/*gRays[pushIntersectionIndex] = reflectRay;
+				gRays[pushIntersectionIndex + 1] = reflectRay;*/
+
+				Intersection reflectIntersection = FindNearestIntersection(reflectRay);
+				Intersection refractIntersection = FindNearestIntersection(refractRay);
+				refractIntersection.sphereIndex = -3;
+
+				gIntersections[pushIntersectionIndex] = reflectIntersection;
+				gIntersections[pushIntersectionIndex + 1] = refractIntersection;
+			}
+
+			pushIntersectionIndex += 2;
+			++currIntersectionIndex;
+		}
+	}
+
+	// Combine all intersections
+	{
+		int currentDepth = 0;
+		while (currentDepth < DEPTH)
+		{
+			vec3 color = vec3(0.0);
+
+			int index = int(pow(2, currentDepth));
+			for (int i = 0; i < index; i += 2)
+			{
+				Intersection intersection = gIntersections[currentDepth + i];
+				color += GetFragColorFromIntersection(intersection) * 1 / pow(2, currentDepth);
+			}
+
+			gColors[currentDepth++] = color;
+		}
+
+		vec3 finalColor = vec3(0.0);
+		for (int i = 0; i < DEPTH; ++i)
+			finalColor += gColors[i];
+		return finalColor;
+	}
 }
 
 void main()
@@ -171,14 +251,6 @@ void main()
 	ray.origin = vOrigin;
 	ray.dir = normalize(vRay);
 
-	Intersection intersection = FindNearestIntersection(ray);
-	vec3 color;
-	if (intersection.sphereIndex >= 0) // Hit sphere object
-		color = GetFragColorFromIntersection(intersection);
-	else if (intersection.sphereIndex == -1) // Hit light
-		color = vec3(0.3);
-	else // Hit nothing
-		color = vec3(0.01, 0.01, 0.01);
-
+	vec3 color = trace(ray);
 	oFragColor = vec4(pow(color, vec3(1.0 / 2.2)), 1.0);
 }
