@@ -29,6 +29,7 @@ struct Ray
 
 struct Intersection
 {
+	Ray ray;
 	float distance;
 	vec3 hitPoint;
 	vec3 normal;
@@ -60,6 +61,10 @@ Sphere[4] ParseBufferSpheres()
 
 Sphere[4] spheres;
 
+const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+const float lightPower = 40.0;
+const float screenGamma = 2.2;
+
 float HitSphere(Ray ray, vec3 sphereCenter, float radius)
 {
 	vec3 tro = ray.origin - sphereCenter;
@@ -87,6 +92,7 @@ Intersection FindNearestIntersection(Ray ray)
 	Intersection intersection;
 	intersection.sphereIndex = -2;
 	intersection.distance = MAX_DISTANCE;
+	intersection.ray = ray;
 
 	// Check for scene spheres intersections
 	for (int i = 0; i < 4; ++i)
@@ -115,16 +121,56 @@ Intersection FindNearestIntersection(Ray ray)
 	return intersection;
 }
 
+// Blinn-Phong + Shadows
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
-	vec3 fragColor = spheres[intersection.sphereIndex].surfaceColor;
+	/*vec3 fragColor = spheres[intersection.sphereIndex].surfaceColor;
 	Ray ray;
 	ray.origin = intersection.hitPoint;
 	ray.dir = normalize(uLightPosition - intersection.hitPoint);
 	Intersection nextInt = FindNearestIntersection(ray);
 	if (intersection.sphereIndex != nextInt.sphereIndex && nextInt.sphereIndex >= 0)
 		fragColor *= 0.5;
-	return fragColor;
+	return fragColor;*/
+
+	// Blinn-Phong + Shadows
+	vec3 color = spheres[intersection.sphereIndex].surfaceColor;
+	vec3 ambient = 0.05 * color;
+	vec3 diffuse = vec3(0);
+	vec3 specular = vec3(0);
+
+	vec3 lightDir = uLightPosition - intersection.hitPoint;
+	float distance = length(lightDir);
+	distance = distance * distance;
+	lightDir = normalize(lightDir); // Optimize?
+
+	vec3 normal = intersection.normal;
+	float dotProd = dot(lightDir, normal);
+	float diff = max(dotProd, 0.0);
+	if (diff > 0.0)
+	{
+		diffuse = color * diff * lightColor * lightPower / distance;
+
+		vec3 viewDir = normalize(intersection.ray.origin - intersection.hitPoint);
+		vec3 reflectDir = reflect(-lightDir, normal);
+		float spec = 0.0;
+		vec3 halfwayDir = normalize(lightDir + viewDir);
+		spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
+		specular = color * spec * lightColor * lightPower / distance;
+	}
+
+	// Check for shadow ray
+	Ray ray;
+	ray.origin = intersection.hitPoint;
+	ray.dir = lightDir;
+	Intersection lightIntersection = FindNearestIntersection(ray);
+	if (intersection.sphereIndex != lightIntersection.sphereIndex && lightIntersection.sphereIndex >= 0)
+	{
+		diffuse = max(dot(-lightDir, normal), 0.0) * color;
+		specular = vec3(0);
+	}
+
+	return ambient + diffuse + specular;
 }
 
 void main()
@@ -135,10 +181,13 @@ void main()
 	ray.dir = normalize(vRay);
 
 	Intersection intersection = FindNearestIntersection(ray);
+	vec3 color;
 	if (intersection.sphereIndex >= 0) // Hit sphere object
-		oFragColor = vec4(GetFragColorFromIntersection(intersection), 1.0);
+		color = GetFragColorFromIntersection(intersection);
 	else if (intersection.sphereIndex == -1) // Hit light
-		oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+		color = vec3(0.3);
 	else // Hit nothing
-		oFragColor = vec4(0.1, 0.1, 0.1, 1.0);
+		color = vec3(0.01, 0.01, 0.01);
+
+	oFragColor = vec4(pow(color, vec3(1.0 / 2.2)), 1.0);
 }
