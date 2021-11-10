@@ -124,15 +124,6 @@ Intersection FindNearestIntersection(Ray ray)
 // Blinn-Phong + Shadows
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
-	/*vec3 fragColor = spheres[intersection.sphereIndex].surfaceColor;
-	Ray ray;
-	ray.origin = intersection.hitPoint;
-	ray.dir = normalize(uLightPosition - intersection.hitPoint);
-	Intersection nextInt = FindNearestIntersection(ray);
-	if (intersection.sphereIndex != nextInt.sphereIndex && nextInt.sphereIndex >= 0)
-		fragColor *= 0.5;
-	return fragColor;*/
-
 	// Blinn-Phong + Shadows
 	vec3 color = spheres[intersection.sphereIndex].surfaceColor;
 	vec3 ambient = 0.05 * color;
