@@ -136,7 +136,6 @@ void MainLayer::OnAttach()
 		"assets/textures/skybox/back.jpg"
 	};
 	mCubemap = LoadCubemap(faces);
-
 }
 
 void MainLayer::OnUpdate(Timestep ts)
