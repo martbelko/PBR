@@ -66,7 +66,45 @@ const vec3 lightColor = vec3(1.0, 0.0, 1.0);
 const float lightPower = 40.0;
 const float screenGamma = 2.2;
 
-float HitSphere(Ray ray, vec3 sphereCenter, float radius)
+vec4 RayIntersectSphere(Ray ray, vec3 center, float radius)
+{
+	//get the vector from the center of this circle to where the ray begins.
+	vec3 m = ray.origin - center;
+
+	//get the dot product of the above vector and the ray's vector
+	float b = dot(m, ray.dir);
+
+	float c = dot(m, m) - radius * radius;
+
+	//exit if r's origin outside s (c > 0) and r pointing away from s (b > 0)
+	if(c > 0.0 && b > 0.0)
+		return vec4(-1.0);
+
+	//calculate discriminant
+	float discr = b * b - c;
+
+	//a negative discriminant corresponds to ray missing sphere
+	if(discr < 0.0)
+		return vec4(-1.0);
+
+	//ray now found to intersect sphere, compute smallest t value of intersection
+	float normalMultiplier = 1.0;
+	float collisionTime = -b - sqrt(discr);
+	if (collisionTime < 0.0)
+	{
+		collisionTime = -b + sqrt(discr);
+		normalMultiplier = -1.0;
+	}
+
+	// calculate the normal, flipping it if we hit the inside of the sphere
+	vec3 normal = normalize((ray.origin + ray.dir * collisionTime) - center) * normalMultiplier;
+
+	// return the time t that the collision happened, as well as the surface normal
+	return vec4(collisionTime, normal);
+}
+
+
+float HitSphereOutside(Ray ray, vec3 sphereCenter, float radius)
 {
 	vec3 tro = ray.origin - sphereCenter;
 	float a = dot(ray.dir, ray.dir);
@@ -76,13 +114,36 @@ float HitSphere(Ray ray, vec3 sphereCenter, float radius)
 	if (D < 0.0)
 		return -1.0;
 	float sqrtD = sqrt(D);
-	float nom1 = -b + sqrtD;
-	float nom2 = -b - sqrtD;
+	float nom1 = -b - sqrtD;
+	float nom2 = -b + sqrtD;
 	float denom = 2.0 * a;
 
 	float r1 = nom1 / denom;
 	float r2 = nom2 / denom;
 	return min(r1, r2);
+}
+
+float HitSphereInside(Ray ray, vec3 center, float radius)
+{
+	vec3 tro = ray.origin - center;
+	float a = dot(ray.dir, ray.dir);
+	float b = 2.0 * dot(ray.dir, tro);
+	float c = dot(tro, tro) - (radius * radius);
+	float D = (b * b) - (4.0 * a * c);
+	if (D < 0.0)
+		return -1.0;
+	float sqrtD = sqrt(D);
+	float nom1 = -b - sqrtD;
+	float nom2 = -b + sqrtD;
+	float denom = 2.0 * a;
+
+	float r1 = nom1 / denom;
+	float r2 = nom2 / denom;
+
+	if ((r1 > 0.0 && r2 < 0.0) || (r1 < 0.0 && r2 > 0.0))
+		return max(r1, r2);
+
+	return -1.0;
 }
 
 const float MIN_DISTANCE = -0.001;
@@ -99,7 +160,7 @@ Intersection FindNearestIntersection(Ray ray)
 	for (int i = 0; i < 4; ++i)
 	{
 		vec3 p = spheres[i].center;
-		float t = HitSphere(ray, p, spheres[i].radius);
+		float t = HitSphereOutside(ray, p, spheres[i].radius);
 		if (t > MIN_DISTANCE && t < intersection.distance)
 		{
 			intersection.distance = t;
@@ -110,7 +171,7 @@ Intersection FindNearestIntersection(Ray ray)
 	}
 
 	// Check for light intersection
-	float lightT = HitSphere(ray, uLightPosition, 0.5);
+	float lightT = HitSphereOutside(ray, uLightPosition, 0.5);
 	if (lightT > MIN_DISTANCE && lightT < intersection.distance)
 	{
 		intersection.distance = lightT;
@@ -129,7 +190,7 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 		return lightColor;
 	else if (intersection.sphereIndex == -2)
 		return texture(uCubemap, intersection.ray.dir).rgb;
-	else if (intersection.sphereIndex < -2)
+	else if (intersection.sphereIndex == -3)
 		return vec3(0.0);
 	else
 		return spheres[intersection.sphereIndex].surfaceColor;
@@ -208,7 +269,6 @@ vec3 trace(Ray primaryRay)
 
 				Intersection reflectIntersection = FindNearestIntersection(reflectRay);
 				Intersection refractIntersection = FindNearestIntersection(refractRay);
-				refractIntersection.sphereIndex = -3;
 
 				gIntersections[pushIntersectionIndex] = reflectIntersection;
 				gIntersections[pushIntersectionIndex + 1] = refractIntersection;
@@ -221,7 +281,8 @@ vec3 trace(Ray primaryRay)
 
 	// Combine all intersections
 	{
-		for (int currentDepth = 0; currentDepth < uMaxDepth; ++currentDepth)
+		gColors[0] = GetFragColorFromIntersection(gIntersections[0]);
+		for (int currentDepth = 1; currentDepth < uMaxDepth; ++currentDepth)
 		{
 			vec3 color = vec3(0.0);
 			int index = int(pow(2, currentDepth));
