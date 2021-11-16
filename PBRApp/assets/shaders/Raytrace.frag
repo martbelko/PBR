@@ -126,7 +126,7 @@ Intersection FindNearestIntersection(Ray ray)
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
 	if (intersection.sphereIndex == -1)
-		return vec3(1.0, 0.0, 0.0);
+		return lightColor;
 	else if (intersection.sphereIndex == -2)
 		return texture(uCubemap, intersection.ray.dir).rgb;
 	else if (intersection.sphereIndex < -2)
@@ -178,23 +178,24 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 	return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-#define DEPTH 3
+uniform int uMaxDepth = 3;
+Intersection[512] gIntersections;
+vec3 gColors[9];
 vec3 trace(Ray primaryRay)
 {
-	Intersection[7] gIntersections;
-	vec3 gColors[DEPTH];
-
+	for (int i = 0; i < 512; ++i)
+		gIntersections[i].sphereIndex = -3;
 	// Generate all intersections
 	{
 		gIntersections[0] = FindNearestIntersection(primaryRay);
 		int pushIntersectionIndex = 1;
 		int currIntersectionIndex = 0;
-		while (currIntersectionIndex < DEPTH)
+		while (currIntersectionIndex < uMaxDepth)
 		{
 			Intersection intersection = gIntersections[currIntersectionIndex];
 			if (intersection.sphereIndex < 0) // Ray hits nothing or light
 			{
-				gIntersections[pushIntersectionIndex].sphereIndex = -3;
+				gIntersections[pushIntersectionIndex].sphereIndex = -3; // Actual intersection color is 0 (black), so nothing gets added to the final color
 				gIntersections[pushIntersectionIndex + 1].sphereIndex = -3;
 			}
 			else
@@ -204,8 +205,6 @@ vec3 trace(Ray primaryRay)
 
 				Ray reflectRay = Ray(intersection.hitPoint, reflectDir);
 				Ray refractRay = Ray(intersection.hitPoint, refractDir);
-				/*gRays[pushIntersectionIndex] = reflectRay;
-				gRays[pushIntersectionIndex + 1] = reflectRay;*/
 
 				Intersection reflectIntersection = FindNearestIntersection(reflectRay);
 				Intersection refractIntersection = FindNearestIntersection(refractRay);
@@ -222,23 +221,22 @@ vec3 trace(Ray primaryRay)
 
 	// Combine all intersections
 	{
-		int currentDepth = 0;
-		while (currentDepth < DEPTH)
+		for (int currentDepth = 0; currentDepth < uMaxDepth; ++currentDepth)
 		{
 			vec3 color = vec3(0.0);
-
 			int index = int(pow(2, currentDepth));
 			for (int i = 0; i < index; i += 2)
 			{
+				int finalIndex = currentDepth + i;
 				Intersection intersection = gIntersections[currentDepth + i];
-				color += GetFragColorFromIntersection(intersection) * 1 / pow(2, currentDepth);
+				color += GetFragColorFromIntersection(intersection) / index;
 			}
 
-			gColors[currentDepth++] = color;
+			gColors[currentDepth] = color;
 		}
 
 		vec3 finalColor = vec3(0.0);
-		for (int i = 0; i < DEPTH; ++i)
+		for (int i = 0; i < uMaxDepth; ++i)
 			finalColor += gColors[i];
 		return finalColor;
 	}

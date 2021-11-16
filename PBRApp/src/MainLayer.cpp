@@ -141,6 +141,7 @@ void MainLayer::OnAttach()
 
 void MainLayer::OnUpdate(Timestep ts)
 {
+	mLastTs = ts;
 	ProcessInput(ts);
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -163,23 +164,28 @@ void MainLayer::OnUpdate(Timestep ts)
 
 void MainLayer::OnImGuiRender()
 {
-	if (mShowCursor)
+	ImGui::Begin("Options");
 	{
-		ImGui::Begin("Options");
-		{
-			float cameraSpeed = mCamera.GetSpeed();
-			float cameraSens = mCamera.GetMouseSensitivity();
-			if (ImGui::DragFloat("Camera speed", &cameraSpeed, 0.1f, 0.01f, 1000.0f));
-				mCamera.SetSpeed(cameraSpeed);
-			if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
-				mCamera.SetMouseSensitivity(cameraSens);
-			if (ImGui::Button("Reset camera position to light position"))
-			{
-				mCamera.SetPosition(glm::vec3(5.0f, 5.0f, 5.0f));
-			}
-		}
-		ImGui::End();
+		float cameraSpeed = mCamera.GetSpeed();
+		float cameraSens = mCamera.GetMouseSensitivity();
+		static int depth = 3;
+		if (ImGui::DragFloat("Camera speed", &cameraSpeed, 0.1f, 0.01f, 1000.0f))
+			mCamera.SetSpeed(cameraSpeed);
+		if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
+			mCamera.SetMouseSensitivity(cameraSens);
+		if (ImGui::Button("Reset camera position to light position"))
+			mCamera.SetPosition(glm::vec3(5.0f, 5.0f, 5.0f));
+		if (ImGui::SliderInt("Max Depth", &depth, 0, 9))
+			mRaytraceShader->UploadUniformInt("uMaxDepth", depth);
 	}
+	ImGui::End();
+
+	if (ImGui::Begin("Status"))
+	{
+		ImGui::Text("Frame time: %f ms", mLastTs.GetMilliseconds());
+		ImGui::Text("FPS: %f", 1.0f / mLastTs);
+	}
+	ImGui::End();
 }
 
 void MainLayer::ProcessInput(Timestep ts)

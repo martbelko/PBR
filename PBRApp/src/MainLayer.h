@@ -51,6 +51,8 @@ private:
 	float lastX;
 	float lastY;
 
+	Timestep mLastTs;
+
 	bool mFirstMouse = true;
 	bool mShowCursor = false;
 
