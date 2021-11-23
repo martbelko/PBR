@@ -174,8 +174,8 @@ void MainLayer::OnImGuiRender()
 			mCamera.SetMouseSensitivity(cameraSens);
 		if (ImGui::Button("Reset camera position to light position"))
 			mCamera.SetPosition(glm::vec3(5.0f, 5.0f, 5.0f));
-		if (ImGui::SliderInt("Max Depth", &depth, 0, 9))
-			mRaytraceShader->UploadUniformInt("uMaxDepth", depth);
+		/*if (ImGui::SliderInt("Max Depth", &depth, 0, 9))
+			mRaytraceShader->UploadUniformInt("uMaxDepth", depth);*/
 	}
 	ImGui::End();
 

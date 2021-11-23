@@ -66,28 +66,18 @@ const vec3 lightColor = vec3(1.0, 0.0, 1.0);
 const float lightPower = 40.0;
 const float screenGamma = 2.2;
 
-vec4 RayIntersectSphere(Ray ray, vec3 center, float radius)
+/*vec4 RayIntersectSphere(Ray ray, vec3 center, float radius)
 {
-	//get the vector from the center of this circle to where the ray begins.
 	vec3 m = ray.origin - center;
-
-	//get the dot product of the above vector and the ray's vector
 	float b = dot(m, ray.dir);
-
 	float c = dot(m, m) - radius * radius;
-
-	//exit if r's origin outside s (c > 0) and r pointing away from s (b > 0)
 	if(c > 0.0 && b > 0.0)
 		return vec4(-1.0);
 
-	//calculate discriminant
 	float discr = b * b - c;
-
-	//a negative discriminant corresponds to ray missing sphere
 	if(discr < 0.0)
 		return vec4(-1.0);
 
-	//ray now found to intersect sphere, compute smallest t value of intersection
 	float normalMultiplier = 1.0;
 	float collisionTime = -b - sqrt(discr);
 	if (collisionTime < 0.0)
@@ -96,13 +86,9 @@ vec4 RayIntersectSphere(Ray ray, vec3 center, float radius)
 		normalMultiplier = -1.0;
 	}
 
-	// calculate the normal, flipping it if we hit the inside of the sphere
 	vec3 normal = normalize((ray.origin + ray.dir * collisionTime) - center) * normalMultiplier;
-
-	// return the time t that the collision happened, as well as the surface normal
 	return vec4(collisionTime, normal);
-}
-
+}*/
 
 float HitSphereOutside(Ray ray, vec3 sphereCenter, float radius)
 {
@@ -183,7 +169,6 @@ Intersection FindNearestIntersection(Ray ray)
 	return intersection;
 }
 
-// Blinn-Phong + Shadows
 vec3 GetFragColorFromIntersection(Intersection intersection)
 {
 	if (intersection.sphereIndex == -1)
@@ -194,57 +179,14 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 		return vec3(0.0);
 	else
 		return spheres[intersection.sphereIndex].surfaceColor;
-
-	// Blinn-Phong + Shadows
-	vec3 color = spheres[intersection.sphereIndex].surfaceColor;
-	vec3 ambient = 0.05 * color;
-	vec3 diffuse = vec3(0);
-	vec3 specular = vec3(0);
-
-	vec3 lightDir = uLightPosition - intersection.hitPoint;
-	float distance = length(lightDir);
-	distance = distance * distance;
-	lightDir = normalize(lightDir);
-
-	vec3 normal = intersection.normal;
-	float diff = max(dot(lightDir, normal), 0.0);
-	if (diff > 0.0)
-	{
-		diffuse = color * diff * lightColor * lightPower / distance;
-
-		vec3 viewDir = normalize(intersection.ray.origin - intersection.hitPoint);
-		vec3 reflectDir = reflect(-lightDir, normal);
-		float spec = 0.0;
-		vec3 halfwayDir = normalize(lightDir + viewDir);
-		spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
-		specular = color * spec * lightColor * lightPower / distance;
-	}
-
-	// Check for shadow ray
-	Ray ray;
-	ray.origin = intersection.hitPoint;
-	ray.dir = lightDir;
-	Intersection lightIntersection = FindNearestIntersection(ray);
-	if (intersection.sphereIndex != lightIntersection.sphereIndex && lightIntersection.sphereIndex >= 0)
-	{
-		diffuse = vec3(0);
-		specular = vec3(0);
-	}
-
-	return ambient + diffuse + specular;
 }
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
-	return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-}
-
-uniform int uMaxDepth = 3;
-Intersection[512] gIntersections;
-vec3 gColors[9];
+uniform int uMaxDepth = 4;
+Intersection[16] gIntersections;
+vec3 gColors[4];
 vec3 trace(Ray primaryRay)
 {
-	for (int i = 0; i < 512; ++i)
+	for (int i = 0; i < 16; ++i)
 		gIntersections[i].sphereIndex = -3;
 	// Generate all intersections
 	{
@@ -261,17 +203,31 @@ vec3 trace(Ray primaryRay)
 			}
 			else
 			{
-				vec3 reflectDir = reflect(gIntersections[currIntersectionIndex].ray.dir, intersection.normal);
-				vec3 refractDir = refract(gIntersections[currIntersectionIndex].ray.dir, intersection.normal, 0.5);
+				// Reflect
+				{
+					vec3 reflectDir = reflect(intersection.ray.dir, intersection.normal);
+					Ray reflectRay = Ray(intersection.hitPoint, reflectDir);
+					Intersection reflectIntersection = FindNearestIntersection(reflectRay);
+					gIntersections[pushIntersectionIndex] = reflectIntersection;
+				}
 
-				Ray reflectRay = Ray(intersection.hitPoint, reflectDir);
-				Ray refractRay = Ray(intersection.hitPoint, refractDir);
+				// Refract
+				{
+					vec3 refractDir = normalize(refract(intersection.ray.dir, intersection.normal, 1.0 / 1.45));
+					Ray refractRay = Ray(intersection.hitPoint + 0.001 * refractDir, refractDir);
+					int index = intersection.sphereIndex;
+					float dist = HitSphereInside(refractRay, spheres[index].center, spheres[index].radius);
+					vec3 hitPoint = refractRay.origin + dist * refractRay.dir;
+					vec3 normal = -normalize(hitPoint - spheres[index].center);
 
-				Intersection reflectIntersection = FindNearestIntersection(reflectRay);
-				Intersection refractIntersection = FindNearestIntersection(refractRay);
+					refractRay.dir = normalize(refract(refractRay.dir, normal, 1.45));
+					refractRay.origin = hitPoint + 0.001 * refractRay.dir;
 
-				gIntersections[pushIntersectionIndex] = reflectIntersection;
-				gIntersections[pushIntersectionIndex + 1] = refractIntersection;
+					Intersection refractIntersection = FindNearestIntersection(refractRay);
+					if ((pushIntersectionIndex + 1) % 2 != 0)
+						return vec3(0);
+					gIntersections[pushIntersectionIndex + 1] = refractIntersection;
+				}
 			}
 
 			pushIntersectionIndex += 2;
@@ -286,11 +242,18 @@ vec3 trace(Ray primaryRay)
 		{
 			vec3 color = vec3(0.0);
 			int index = int(pow(2, currentDepth));
+			int offset = index - 1;
 			for (int i = 0; i < index; i += 2)
 			{
-				int finalIndex = currentDepth + i;
-				Intersection intersection = gIntersections[currentDepth + i];
-				color += GetFragColorFromIntersection(intersection) / index;
+				int finalIndex = offset + i;
+				// Reflection
+				Intersection intersectionReflect = gIntersections[finalIndex];
+				if (finalIndex % 2 != 1)
+					return vec3(0);
+				color += GetFragColorFromIntersection(intersectionReflect) / index / 2.0;
+				// Refraction
+				Intersection intersectionRefract = gIntersections[finalIndex + 1];
+				color += GetFragColorFromIntersection(intersectionRefract) / index / 2.0;
 			}
 
 			gColors[currentDepth] = color;
