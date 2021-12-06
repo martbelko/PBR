@@ -66,30 +66,6 @@ const vec3 lightColor = vec3(1.0, 0.0, 1.0);
 const float lightPower = 40.0;
 const float screenGamma = 2.2;
 
-/*vec4 RayIntersectSphere(Ray ray, vec3 center, float radius)
-{
-	vec3 m = ray.origin - center;
-	float b = dot(m, ray.dir);
-	float c = dot(m, m) - radius * radius;
-	if(c > 0.0 && b > 0.0)
-		return vec4(-1.0);
-
-	float discr = b * b - c;
-	if(discr < 0.0)
-		return vec4(-1.0);
-
-	float normalMultiplier = 1.0;
-	float collisionTime = -b - sqrt(discr);
-	if (collisionTime < 0.0)
-	{
-		collisionTime = -b + sqrt(discr);
-		normalMultiplier = -1.0;
-	}
-
-	vec3 normal = normalize((ray.origin + ray.dir * collisionTime) - center) * normalMultiplier;
-	return vec4(collisionTime, normal);
-}*/
-
 float HitSphereOutside(Ray ray, vec3 sphereCenter, float radius)
 {
 	vec3 tro = ray.origin - sphereCenter;

@@ -115,7 +115,7 @@ void MainLayer::OnAttach()
 		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f
+		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 0.33f, 0.33f, 0.33f, 1.0f
 	};
 
 	GLuint ssbo;
@@ -172,10 +172,6 @@ void MainLayer::OnImGuiRender()
 			mCamera.SetSpeed(cameraSpeed);
 		if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
 			mCamera.SetMouseSensitivity(cameraSens);
-		if (ImGui::Button("Reset camera position to light position"))
-			mCamera.SetPosition(glm::vec3(5.0f, 5.0f, 5.0f));
-		/*if (ImGui::SliderInt("Max Depth", &depth, 0, 9))
-			mRaytraceShader->UploadUniformInt("uMaxDepth", depth);*/
 	}
 	ImGui::End();
 
