@@ -32,6 +32,8 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Camera.h"
 
+#include "AtomLoader.h"
+
 class Quad
 {
 public:
@@ -136,6 +138,8 @@ void MainLayer::OnAttach()
 		"assets/textures/skybox/back.jpg"
 	};
 	mCubemap = LoadCubemap(faces);
+
+	AtomLoader loader("assets/data/1cqw.pdb", "assets/data/test.xml");
 }
 
 void MainLayer::OnUpdate(Timestep ts)
