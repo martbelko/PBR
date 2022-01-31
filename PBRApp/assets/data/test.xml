@@ -1,0 +1,449 @@
+<root>
+<scheme type="Atoms" strategy="Atom element" name="Default">
+    <color id="1" r="0.900" g="0.900" b="0.900"/>
+    <color id="2" r="0.851" g="1.000" b="1.000"/>
+    <color id="3" r="0.800" g="0.502" b="1.000"/>
+    <color id="4" r="0.761" g="1.000" b="0.000"/>
+    <color id="5" r="1.000" g="0.710" b="0.710"/>
+    <color id="6" r="0.565" g="0.565" b="0.565"/>
+    <color id="7" r="0.200" g="0.200" b="1.000"/>
+    <color id="8" r="1.000" g="0.300" b="0.300"/>
+    <color id="9" r="0.702" g="1.000" b="1.000"/>
+    <color id="10" r="0.701" g="0.890" b="0.960"/>
+    <color id="11" r="0.670" g="0.360" b="0.949"/>
+    <color id="12" r="0.541" g="1.000" b="0.000"/>
+    <color id="13" r="0.749" g="0.650" b="0.650"/>
+    <color id="14" r="0.941" g="0.784" b="0.627"/>
+    <color id="15" r="1.000" g="0.502" b="0.000"/>
+    <color id="16" r="0.900" g="0.775" b="0.250"/>
+    <color id="17" r="0.121" g="0.941" b="0.121"/>
+    <color id="18" r="0.501" g="0.819" b="0.890"/>
+    <color id="19" r="0.560" g="0.250" b="0.831"/>
+    <color id="20" r="0.239" g="1.000" b="0.000"/>
+    <color id="21" r="0.901" g="0.901" b="0.901"/>
+    <color id="22" r="0.749" g="0.760" b="0.780"/>
+    <color id="23" r="0.650" g="0.650" b="0.670"/>
+    <color id="24" r="0.541" g="0.600" b="0.780"/>
+    <color id="25" r="0.611" g="0.478" b="0.780"/>
+    <color id="26" r="0.878" g="0.400" b="0.200"/>
+    <color id="27" r="0.941" g="0.564" b="0.627"/>
+    <color id="28" r="0.313" g="0.815" b="0.313"/>
+    <color id="29" r="0.784" g="0.501" b="0.200"/>
+    <color id="30" r="0.490" g="0.501" b="0.690"/>
+    <color id="31" r="0.760" g="0.560" b="0.560"/>
+    <color id="32" r="0.400" g="0.560" b="0.560"/>
+    <color id="33" r="0.741" g="0.501" b="0.890"/>
+    <color id="34" r="1.000" g="0.631" b="0.000"/>
+    <color id="35" r="0.650" g="0.160" b="0.160"/>
+    <color id="36" r="0.360" g="0.721" b="0.819"/>
+    <color id="37" r="0.439" g="0.180" b="0.690"/>
+    <color id="38" r="0.000" g="1.000" b="0.000"/>
+    <color id="39" r="0.580" g="1.000" b="1.000"/>
+    <color id="40" r="0.580" g="0.878" b="0.878"/>
+    <color id="41" r="0.450" g="0.760" b="0.788"/>
+    <color id="42" r="0.329" g="0.709" b="0.709"/>
+    <color id="43" r="0.231" g="0.619" b="0.619"/>
+    <color id="44" r="0.141" g="0.560" b="0.560"/>
+    <color id="45" r="0.039" g="0.490" b="0.549"/>
+    <color id="46" r="0.000" g="0.411" b="0.521"/>
+    <color id="47" r="0.752" g="0.752" b="0.752"/>
+    <color id="48" r="1.000" g="0.850" b="0.560"/>
+    <color id="49" r="0.650" g="0.458" b="0.450"/>
+    <color id="50" r="0.400" g="0.501" b="0.501"/>
+    <color id="51" r="0.619" g="0.388" b="0.709"/>
+    <color id="52" r="0.831" g="0.478" b="0.000"/>
+    <color id="53" r="0.580" g="0.000" b="0.580"/>
+    <color id="54" r="0.258" g="0.619" b="0.690"/>
+    <color id="55" r="0.341" g="0.090" b="0.560"/>
+    <color id="56" r="0.000" g="0.788" b="0.000"/>
+    <color id="57" r="0.439" g="0.831" b="1.000"/>
+    <color id="58" r="1.000" g="1.000" b="0.780"/>
+    <color id="59" r="0.850" g="1.000" b="0.780"/>
+    <color id="60" r="0.780" g="1.000" b="0.780"/>
+    <color id="61" r="0.639" g="1.000" b="0.780"/>
+    <color id="62" r="0.560" g="1.000" b="0.780"/>
+    <color id="63" r="0.380" g="1.000" b="0.780"/>
+    <color id="64" r="0.270" g="1.000" b="0.780"/>
+    <color id="65" r="0.188" g="1.000" b="0.780"/>
+    <color id="66" r="0.121" g="1.000" b="0.780"/>
+    <color id="67" r="0.000" g="1.000" b="0.611"/>
+    <color id="68" r="0.000" g="0.901" b="0.458"/>
+    <color id="69" r="0.000" g="0.831" b="0.321"/>
+    <color id="70" r="0.000" g="0.749" b="0.219"/>
+    <color id="71" r="0.000" g="0.670" b="0.141"/>
+    <color id="72" r="0.301" g="0.760" b="1.000"/>
+    <color id="73" r="0.301" g="0.650" b="1.000"/>
+    <color id="74" r="0.129" g="0.580" b="0.839"/>
+    <color id="75" r="0.149" g="0.490" b="0.670"/>
+    <color id="76" r="0.149" g="0.400" b="0.588"/>
+    <color id="77" r="0.090" g="0.329" b="0.529"/>
+    <color id="78" r="0.815" g="0.815" b="0.878"/>
+    <color id="79" r="1.000" g="0.819" b="0.137"/>
+    <color id="80" r="0.721" g="0.721" b="0.815"/>
+    <color id="81" r="0.650" g="0.329" b="0.301"/>
+    <color id="82" r="0.341" g="0.349" b="0.380"/>
+    <color id="83" r="0.619" g="0.309" b="0.709"/>
+    <color id="84" r="0.670" g="0.360" b="0.000"/>
+    <color id="85" r="0.458" g="0.309" b="0.270"/>
+    <color id="86" r="0.258" g="0.509" b="0.588"/>
+    <color id="87" r="0.258" g="0.000" b="0.400"/>
+    <color id="88" r="0.000" g="0.490" b="0.000"/>
+    <color id="89" r="0.439" g="0.670" b="0.980"/>
+    <color id="90" r="0.000" g="0.729" b="1.000"/>
+    <color id="91" r="0.000" g="0.631" b="1.000"/>
+    <color id="92" r="0.000" g="0.560" b="1.000"/>
+    <color id="93" r="0.000" g="0.501" b="1.000"/>
+    <color id="94" r="0.000" g="0.419" b="1.000"/>
+    <color id="95" r="0.329" g="0.360" b="0.949"/>
+    <color id="96" r="0.470" g="0.360" b="0.890"/>
+    <color id="97" r="0.541" g="0.309" b="0.890"/>
+    <color id="98" r="0.631" g="0.211" b="0.831"/>
+    <color id="99" r="0.701" g="0.121" b="0.831"/>
+    <color id="100" r="0.701" g="0.121" b="0.729"/>
+    <color id="101" r="0.701" g="0.050" b="0.650"/>
+    <color id="102" r="0.741" g="0.050" b="0.529"/>
+    <color id="103" r="0.780" g="0.000" b="0.400"/>
+    <color id="104" r="0.800" g="0.000" b="0.349"/>
+    <color id="105" r="0.819" g="0.000" b="0.309"/>
+    <color id="106" r="0.850" g="0.000" b="0.270"/>
+    <color id="107" r="0.878" g="0.000" b="0.219"/>
+    <color id="108" r="0.901" g="0.000" b="0.180"/>
+    <color id="109" r="0.921" g="0.000" b="0.149"/>
+    <color id="110" r="0.911" g="0.000" b="0.200"/>
+    <color id="111" r="0.900" g="0.000" b="0.231"/>
+    <color id="112" r="0.920" g="0.000" b="0.186"/>
+    <color id="113" r="0.900" g="0.900" b="0.900"/>
+    <color id="114" r="1.000" g="0.300" b="0.300"/>
+    <color id="115" r="0.900" g="0.900" b="0.900"/>
+</scheme>
+<scheme type="Residues" strategy="Amino acid" name="Default">
+    <color id="1" r="0.752" g="0.752" b="0.752"/>
+    <color id="2" r="0.200" g="0.000" b="1.000"/>
+    <color id="3" r="0.000" g="0.800" b="0.200"/>
+    <color id="4" r="1.000" g="0.000" b="0.000"/>
+    <color id="5" r="1.000" g="1.000" b="0.000"/>
+    <color id="6" r="1.000" g="0.000" b="0.000"/>
+    <color id="7" r="0.000" g="0.800" b="0.200"/>
+    <color id="8" r="0.752" g="0.752" b="0.752"/>
+    <color id="9" r="0.000" g="0.800" b="0.200"/>
+    <color id="10" r="0.752" g="0.752" b="0.752"/>
+    <color id="11" r="0.752" g="0.752" b="0.752"/>
+    <color id="12" r="0.200" g="0.000" b="1.000"/>
+    <color id="13" r="0.752" g="0.752" b="0.752"/>
+    <color id="14" r="0.752" g="0.752" b="0.752"/>
+    <color id="15" r="0.752" g="0.752" b="0.752"/>
+    <color id="16" r="0.000" g="0.800" b="0.200"/>
+    <color id="17" r="0.000" g="0.800" b="0.200"/>
+    <color id="18" r="0.752" g="0.752" b="0.752"/>
+    <color id="19" r="0.752" g="0.752" b="0.752"/>
+    <color id="20" r="0.752" g="0.752" b="0.752"/>
+    <color id="21" r="0.500" g="0.500" b="0.500"/>
+    <color id="22" r="0.500" g="0.500" b="0.500"/>
+    <color id="23" r="0.500" g="0.500" b="0.500"/>
+    <color id="24" r="0.500" g="0.500" b="0.500"/>
+    <color id="25" r="0.500" g="0.500" b="0.500"/>
+    <color id="26" r="0.500" g="0.500" b="0.500"/>
+    <color id="27" r="0.500" g="0.500" b="0.500"/>
+    <color id="28" r="0.500" g="0.500" b="0.500"/>
+    <color id="29" r="0.000" g="0.800" b="0.200"/>
+    <color id="30" r="0.000" g="0.800" b="0.200"/>
+    <color id="31" r="0.000" g="0.800" b="0.200"/>
+    <color id="32" r="0.500" g="0.500" b="0.500"/>
+    <color id="33" r="0.500" g="0.500" b="0.500"/>
+    <color id="38" r="0.500" g="0.500" b="0.500"/>
+    <color id="39" r="0.500" g="0.500" b="0.500"/>
+    <color id="40" r="0.500" g="0.500" b="0.500"/>
+    <color id="41" r="0.500" g="0.500" b="0.500"/>
+    <color id="42" r="0.500" g="0.500" b="0.500"/>
+</scheme>
+<scheme type="ResiduesMapping" name="Default">
+    <residue id="1" type="aa_20" identifier="ALA" shortcut="A" name="Alanine" hydropathy="1.8" hydrophobicity="0.02" donors="" acceptors=""/>
+    <residue id="2" type="aa_20" identifier="ARG" shortcut="R" name="Arginine" hydropathy="-4.5" hydrophobicity="-0.42" donors="NE,NH1,NH2" acceptors="" charge="+"/>
+    <residue id="3" type="aa_20" identifier="ASN" shortcut="N" name="Asparagine" hydropathy="-3.5" hydrophobicity="-0.77" donors="ND2" acceptors="OD1"/>
+    <residue id="4" type="aa_20" identifier="ASP" shortcut="D" name="Aspartic Acid" hydropathy="-3.5" hydrophobicity="-1.04" donors="" acceptors="OD1,OD2" charge="-"/>
+    <!-- Aspartic acid with neutral charge -->
+    <residue id="35" type="aa_ext" identifier="ASH" shortcut="D" name="Aspartic Acid" hydropathy="-3.5" hydrophobicity="-1.04" donors="" acceptors="OD1,OD2"/>
+    <residue id="5" type="aa_20" identifier="CYS" shortcut="C" name="Cysteine" hydropathy="2.5" hydrophobicity="0.77" donors="" acceptors=""/>
+    <residue id="36" type="aa_20" identifier="CYX" shortcut="C" name="Cysteine" hydropathy="2.5" hydrophobicity="0.77" donors="" acceptors=""/>
+    <residue id="6" type="aa_20" identifier="GLU" shortcut="E" name="Glutamic Acid" hydropathy="-3.5" hydrophobicity="-1.14" donors="" acceptors="OE1,OE2" charge="-"/>
+    <!-- Glutamic acid with neutral charge -->
+    <residue id="34" type="aa_ext" identifier="GLH" shortcut="E" name="Glutamic Acid" hydropathy="-3.5" hydrophobicity="-1.14" donors="" acceptors=""/>
+    <residue id="7" type="aa_20" identifier="GLN" shortcut="Q" name="Glutamine" hydropathy="-3.5" hydrophobicity="-1.10" donors="NE2" acceptors="OE1"/>
+    <residue id="8" type="aa_20" identifier="GLY" shortcut="G" name="Glycine" hydropathy="-0.4" hydrophobicity="-0.80" donors="" acceptors=""/>
+    <!-- Histidine and it's variants -->
+    <residue id="9" type="aa_20" identifier="HIS" shortcut="H" name="Histidine" hydropathy="-3.2" hydrophobicity="0.26" donors="ND1,NE2" acceptors="ND1,NE2" charge="+"/>
+    <residue id="29" type="aa_ext" identifier="HIE" shortcut="H" name="Histidine" hydropathy="-3.2" hydrophobicity="0.26" donors="ND1,NE2" acceptors="ND1,NE2"/>
+    <residue id="30" type="aa_ext" identifier="HID" shortcut="H" name="Histidine" hydropathy="-3.2" hydrophobicity="0.26" donors="ND1,NE2" acceptors="ND1,NE2"/>
+    <residue id="31" type="aa_ext" identifier="HIP" shortcut="H" name="Histidine" hydropathy="-3.2" hydrophobicity="0.26" donors="ND1,NE2" acceptors="ND1,NE2" charge="+"/>
+    <!-- -->
+    <residue id="10" type="aa_20" identifier="ILE" shortcut="I" name="Isoleucine" hydropathy="4.5" hydrophobicity="1.81" donors="" acceptors=""/>
+    <residue id="11" type="aa_20" identifier="LEU" shortcut="L" name="Leucine" hydropathy="3.8" hydrophobicity="1.14" donors="" acceptors=""/>
+    <residue id="12" type="aa_20" identifier="LYS" shortcut="K" name="Lysine" hydropathy="-3.9" hydrophobicity="-0.41" donors="NZ" acceptors="" charge="+"/>
+    <!-- Lysine with neutral charge -->
+    <residue id="37" type="aa_ext" identifier="LYN" shortcut="K" name="Lysine" hydropathy="-3.9" hydrophobicity="-0.41" donors="NZ" acceptors=""/>
+    <residue id="13" type="aa_20" identifier="MET" shortcut="M" name="Methionine" hydropathy="1.9" hydrophobicity="1.00" donors="" acceptors=""/>
+    <residue id="14" type="aa_20" identifier="PHE" shortcut="F" name="Phenylalanine" hydropathy="2.8" hydrophobicity="1.35" donors="" acceptors=""/>
+    <residue id="15" type="aa_20" identifier="PRO" shortcut="P" name="Proline" hydropathy="-1.6" hydrophobicity="-0.09" donors="" acceptors=""/>
+    <residue id="16" type="aa_20" identifier="SER" shortcut="S" name="Serine" hydropathy="-0.8" hydrophobicity="-0.97" donors="OG" acceptors="OG"/>
+    <residue id="17" type="aa_20" identifier="THR" shortcut="T" name="Threonine" hydropathy="-0.7" hydrophobicity="-0.77" donors="OG1" acceptors="OG1"/>
+    <residue id="18" type="aa_20" identifier="TRP" shortcut="W" name="Tryptophan" hydropathy="-0.9" hydrophobicity="1.71" donors="NE1" acceptors=""/>
+    <residue id="19" type="aa_20" identifier="TYR" shortcut="Y" name="Tyrosine" hydropathy="-1.3" hydrophobicity="1.11" donors="OH" acceptors="OH"/>
+    <!--<residue id="38" identifier="TYZ" shortcut="Y" name="Tyrosine"/>-->
+    <residue id="20" type="aa_20" identifier="VAL" shortcut="V" name="Valine" hydropathy="4.2" hydrophobicity="1.13" donors="" acceptors=""/>
+    <!-- Long nucleobases, WARNING: duplicate shortcuts -->
+    <residue id="21" type="nb" identifier="URI" shortcut="U" name="Uracil" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="22" type="nb" identifier="ADE" shortcut="A" name="Adenine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="23" type="nb" identifier="CYT" shortcut="C" name="Cytosine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="24" type="nb" identifier="GUA" shortcut="G" name="Guanine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="25" type="nb" identifier="THY" shortcut="T" name="Thymine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <!-- Water residues -->
+    <residue id="26" type="sol" identifier="HOH" shortcut="HOH" name="Water" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="27" type="sol" identifier="WAT" shortcut="HOH" name="Water" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="28" type="sol" identifier="H2O" shortcut="HOH" name="Water" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="43" type="sol" identifier="SOL" shortcut="SOL" name="Solvent" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="44" type="sol" identifier="TIP3" shortcut="TIP3" name="Water" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <!-- Ligands -->
+    <residue id="32" type="lig" identifier="DCL" shortcut="DCL" name="Ligand" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="33" type="lig" identifier="CL" shortcut="CL" name="Ligand" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <!-- Short nucleobases -->
+    <residue id="38" type="nb" identifier="A" shortcut="A" name="Adenine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="39" type="nb" identifier="C" shortcut="C" name="Cytosine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="40" type="nb" identifier="G" shortcut="G" name="Guanine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="41" type="nb" identifier="T" shortcut="T" name="Thymine" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+    <residue id="42" type="nb" identifier="U" shortcut="U" name="Uracil" hydropathy="0" hydrophobicity="0" donors="" acceptors=""/>
+</scheme>
+<scheme type="AtomsMapping" name="Default">
+    <atom identifier="H" name="Hydrogen" number="1" electronegativity="2.00" valenceElectrons="1"/>
+    <atom identifier="He" name="Helium" number="2" electronegativity="0" valenceElectrons="2"/>
+    <atom identifier="Li" name="Lithium" number="3" electronegativity="0.98" valenceElectrons="1"/>
+    <atom identifier="Be" name="Beryllium" number="4" electronegativity="1.57" valenceElectrons="2"/>
+    <atom identifier="B" name="Boron" number="5" electronegativity="2.04" valenceElectrons="3"/>
+    <atom identifier="C" name="Carbon" number="6" electronegativity="2.55" valenceElectrons="4"/>
+    <atom identifier="N" name="Nitrogen" number="7" electronegativity="3.04" valenceElectrons="5"/>
+    <atom identifier="O" name="Oxygen" number="8" electronegativity="3.44" valenceElectrons="6"/>
+    <atom identifier="F" name="Fluorine" number="9" electronegativity="3.98" valenceElectrons="7"/>
+    <atom identifier="Ne" name="Neon" number="10" electronegativity="0" valenceElectrons="8"/>
+    <atom identifier="Na" name="Sodium" number="11" electronegativity="0.93" valenceElectrons="1"/>
+    <atom identifier="Mg" name="Magnesium" number="12" electronegativity="1.31" valenceElectrons="2"/>
+    <atom identifier="Al" name="Aluminium" number="13" electronegativity="1.61" valenceElectrons="3"/>
+    <atom identifier="Si" name="Silicon" number="14" electronegativity="1.90" valenceElectrons="4"/>
+    <atom identifier="P" name="Phosphorus" number="15" electronegativity="2.19" valenceElectrons="5"/>
+    <atom identifier="S" name="Sulfur" number="16" electronegativity="2.58" valenceElectrons="6"/>
+    <atom identifier="Cl" name="Chlorine" number="17" electronegativity="3.16" valenceElectrons="7"/>
+    <atom identifier="Ar" name="Argon" number="18" electronegativity="0" valenceElectrons="8"/>
+    <atom identifier="K" name="Potassium" number="19" electronegativity="0.82" valenceElectrons="1"/>
+    <atom identifier="Ca" name="Calcium" number="20" electronegativity="1.00" valenceElectrons="2"/>
+    <atom identifier="Sc" name="Scandium" number="21" electronegativity="1.36" valenceElectrons="0"/>
+    <atom identifier="Ti" name="Titanium" number="22" electronegativity="1.54" valenceElectrons="0"/>
+    <atom identifier="V" name="Vanadium" number="23" electronegativity="1.63" valenceElectrons="0"/>
+    <atom identifier="Cr" name="Chromium" number="24" electronegativity="1.66" valenceElectrons="0"/>
+    <atom identifier="Mn" name="Manganese" number="25" electronegativity="1.55" valenceElectrons="0"/>
+    <atom identifier="Fe" name="Iron" number="26" electronegativity="1.83" valenceElectrons="0"/>
+    <atom identifier="Co" name="Cobalt" number="27" electronegativity="1.88" valenceElectrons="0"/>
+    <atom identifier="Ni" name="Nickel" number="28" electronegativity="1.91" valenceElectrons="0"/>
+    <atom identifier="Cu" name="Copper" number="29" electronegativity="1.90" valenceElectrons="0"/>
+    <atom identifier="Zn" name="Zinc" number="30" electronegativity="1.65" valenceElectrons="0"/>
+    <atom identifier="Ga" name="Gallium" number="31" electronegativity="1.81" valenceElectrons="3"/>
+    <atom identifier="Ge" name="Germanium" number="32" electronegativity="2.01" valenceElectrons="4"/>
+    <atom identifier="As" name="Arsenic" number="33" electronegativity="2.18" valenceElectrons="5"/>
+    <atom identifier="Se" name="Selenium" number="34" electronegativity="2.55" valenceElectrons="6"/>
+    <atom identifier="Br" name="Bromine" number="35" electronegativity="2.96" valenceElectrons="7"/>
+    <atom identifier="Kr" name="Krypton" number="36" electronegativity="3.00" valenceElectrons="8"/>
+    <atom identifier="Rb" name="Rubidium" number="37" electronegativity="0.82" valenceElectrons="1"/>
+    <atom identifier="Sr" name="Strontium" number="38" electronegativity="0.95" valenceElectrons="2"/>
+    <atom identifier="Y" name="Yttrium" number="39" electronegativity="1.22" valenceElectrons="0"/>
+    <atom identifier="Zr" name="Zirconium" number="40" electronegativity="1.33" valenceElectrons="0"/>
+    <atom identifier="Nb" name="Niobium" number="41"  electronegativity="1.60" valenceElectrons="0"/>
+    <atom identifier="Mo" name="Molybdenum" number="42" electronegativity="2.16" valenceElectrons="0"/>
+    <atom identifier="Tc" name="Technetium" number="43" electronegativity="1.90" valenceElectrons="0"/>
+    <atom identifier="Ru" name="Ruthenium" number="44" electronegativity="2.20" valenceElectrons="0"/>
+    <atom identifier="Rh" name="Rhodium" number="45" electronegativity="2.28" valenceElectrons="0"/>
+    <atom identifier="Pd" name="Palladium" number="46" electronegativity="2.20" valenceElectrons="0"/>
+    <atom identifier="Ag" name="Silver" number="47" electronegativity="1.93" valenceElectrons="0"/>
+    <atom identifier="Cd" name="Cadmium" number="48" electronegativity="1.69" valenceElectrons="0"/>
+    <atom identifier="In" name="Indium" number="49" electronegativity="1.78" valenceElectrons="3"/>
+    <atom identifier="Sn" name="Tin" number="50" electronegativity="1.96" valenceElectrons="4"/>
+    <atom identifier="Sb" name="Antimony" number="51" electronegativity="2.05" valenceElectrons="5"/>
+    <atom identifier="Te" name="Tellurium" number="52" electronegativity="2.10" valenceElectrons="6"/>
+    <atom identifier="I" name="Iodine" number="53" electronegativity="2.66" valenceElectrons="7"/>
+    <atom identifier="Xe" name="Xenon" number="54" electronegativity="2.60" valenceElectrons="8"/>
+    <atom identifier="Cs" name="Cesium" number="55" electronegativity="0.79" valenceElectrons="1"/>
+    <atom identifier="Ba" name="Barium" number="56" electronegativity="0.89" valenceElectrons="2"/>
+    <atom identifier="La" name="Lanthanum" number="57" electronegativity="1.10" valenceElectrons="0"/>
+    <atom identifier="Ce" name="Cerium" number="58" electronegativity="1.12" valenceElectrons="0"/>
+    <atom identifier="Pr" name="Praseodymium" number="59" electronegativity="1.13" valenceElectrons="0"/>
+    <atom identifier="Nd" name="Neodymium" number="60" electronegativity="1.14" valenceElectrons="0"/>
+    <atom identifier="Pm" name="Promethium" number="61" electronegativity="1.13" valenceElectrons="0"/>
+    <atom identifier="Sm" name="Samarium" number="62" electronegativity="1.17" valenceElectrons="0"/>
+    <atom identifier="Eu" name="Europium" number="63" electronegativity="1.20" valenceElectrons="0"/>
+    <atom identifier="Gd" name="Gadolinium" number="64" electronegativity="1.20" valenceElectrons="0"/>
+    <atom identifier="Tb" name="Terbium" number="65" electronegativity="1.10" valenceElectrons="0"/>
+    <atom identifier="Dy" name="Dysprosium" number="66" electronegativity="1.22" valenceElectrons="0"/>
+    <atom identifier="Ho" name="Holmium" number="67" electronegativity="1.23" valenceElectrons="0"/>
+    <atom identifier="Er" name="Erbium" number="68" electronegativity="1.24" valenceElectrons="0"/>
+    <atom identifier="Tm" name="Thulium" number="69" electronegativity="1.25" valenceElectrons="0"/>
+    <atom identifier="Yb" name="Ytterbium" number="70" electronegativity="1.10" valenceElectrons="0"/>
+    <atom identifier="Lu" name="Lutetium" number="71" electronegativity="1.27" valenceElectrons="0"/>
+    <atom identifier="Hf" name="Hafnium" number="72" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Ta" name="Tantalum" number="73" electronegativity="1.50" valenceElectrons="0"/>
+    <atom identifier="W" name="Tungsten" number="74" electronegativity="2.36" valenceElectrons="0"/>
+    <atom identifier="Re" name="Rhenium" number="75" electronegativity="1.90" valenceElectrons="0"/>
+    <atom identifier="Os" name="Osmium" number="76" electronegativity="2.20" valenceElectrons="0"/>
+    <atom identifier="Ir" name="Iridium" number="77" electronegativity="2.20" valenceElectrons="0"/>
+    <atom identifier="Pt" name="Platinum" number="78" electronegativity="2.28" valenceElectrons="0"/>
+    <atom identifier="Au" name="Gold" number="79" electronegativity="2.54" valenceElectrons="0"/>
+    <atom identifier="Hg" name="Mercury" number="80" electronegativity="2.00" valenceElectrons="0"/>
+    <atom identifier="Tl" name="Thallium" number="81" electronegativity="1.62" valenceElectrons="3"/>
+    <atom identifier="Pb" name="Lead" number="82" electronegativity="2.33" valenceElectrons="4"/>
+    <atom identifier="Bi" name="Bismuth" number="83" electronegativity="2.02" valenceElectrons="5"/>
+    <atom identifier="Po" name="Polonium" number="84" electronegativity="2.00" valenceElectrons="6"/>
+    <atom identifier="At" name="Astatine" number="85" electronegativity="2.20" valenceElectrons="7"/>
+    <atom identifier="Rn" name="Radon" number="86" electronegativity="2.20" valenceElectrons="8"/>
+    <atom identifier="Fr" name="Francium" number="87" electronegativity="0.70" valenceElectrons="1"/>
+    <atom identifier="Ra" name="Radium" number="88" electronegativity="0.90" valenceElectrons="2"/>
+    <atom identifier="Ac" name="Actinium" number="89" electronegativity="1.10" valenceElectrons="0"/>
+    <atom identifier="Th" name="Thorium" number="90" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Pa" name="Protactinium" number="91" electronegativity="1.50" valenceElectrons="0"/>
+    <atom identifier="U" name="Uranium" number="92" electronegativity="1.38" valenceElectrons="0"/>
+    <atom identifier="Np" name="Neptunium" number="93" electronegativity="1.36" valenceElectrons="0"/>
+    <atom identifier="Pu" name="Plutonium" number="94" electronegativity="1.28" valenceElectrons="0"/>
+    <atom identifier="Am" name="Americium" number="95" electronegativity="1.13" valenceElectrons="0"/>
+    <atom identifier="Cm" name="Curium" number="96" electronegativity="1.28" valenceElectrons="0"/>
+    <atom identifier="Bk" name="Berkelium" number="97" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Cf" name="Californium" number="98" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Es" name="Einsteinium" number="99" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Fm" name="Fermium" number="100" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Md" name="Mendelevium" number="101" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="No" name="Nobelium" number="102" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Lr" name="Lawrencium" number="103" electronegativity="1.30" valenceElectrons="0"/>
+    <atom identifier="Rf" name="Rutherfordium" number="104" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Db" name="Dubnium" number="105" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Sg" name="Seaborgium" number="106" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Bh" name="Bohrium" number="107" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Hs" name="Hassium" number="108" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Mt" name="Meitnerium" number="109" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Ds" name="Darmstadtium" number="110" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Rg" name="Roentgenium" number="111" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="Cn" name="Copernicium" number="112" electronegativity="0" valenceElectrons="0"/>
+    <atom identifier="H (WAT)" name="Hydrogen (Water)" number="113" electronegativity="2.00" valenceElectrons="1"/>
+    <atom identifier="O (WAT)" name="Oxygen (Water)" number="114" electronegativity="3.44" valenceElectrons="6"/>
+    <atom identifier="D" name="Hydrogen" number="115" electronegativity="2.00" valenceElectrons="1"/>
+</scheme>
+<scheme type="Radius" name="Default">
+    <vdw id="1" radius="1.200"/>
+    <vdw id="2" radius="1.400"/>
+    <vdw id="3" radius="1.820"/>
+    <vdw id="4" radius="1.530"/>
+    <vdw id="5" radius="1.920"/>
+    <vdw id="6" radius="1.700"/>
+    <vdw id="7" radius="1.550"/>
+    <vdw id="8" radius="1.520"/>
+    <vdw id="9" radius="1.470"/>
+    <vdw id="10" radius="1.540"/>
+    <vdw id="11" radius="2.270"/>
+    <vdw id="12" radius="1.730"/>
+    <vdw id="13" radius="1.840"/>
+    <vdw id="14" radius="2.100"/>
+    <vdw id="15" radius="1.800"/>
+    <vdw id="16" radius="1.800"/>
+    <vdw id="17" radius="1.750"/>
+    <vdw id="18" radius="1.880"/>
+    <vdw id="19" radius="2.750"/>
+    <vdw id="20" radius="2.310"/>
+    <vdw id="21" radius="2.110"/>
+    <vdw id="22" radius="2.000"/>
+    <vdw id="23" radius="2.000"/>
+    <vdw id="24" radius="2.000"/>
+    <vdw id="25" radius="2.000"/>
+    <vdw id="26" radius="2.000"/>
+    <vdw id="27" radius="2.000"/>
+    <vdw id="28" radius="1.630"/>
+    <vdw id="29" radius="1.400"/>
+    <vdw id="30" radius="1.390"/>
+    <vdw id="31" radius="1.870"/>
+    <vdw id="32" radius="2.110"/>
+    <vdw id="33" radius="1.850"/>
+    <vdw id="34" radius="1.900"/>
+    <vdw id="35" radius="1.850"/>
+    <vdw id="36" radius="2.020"/>
+    <vdw id="37" radius="3.030"/>
+    <vdw id="38" radius="2.490"/>
+    <vdw id="39" radius="2.000"/>
+    <vdw id="40" radius="2.000"/>
+    <vdw id="41" radius="2.000"/>
+    <vdw id="42" radius="2.000"/>
+    <vdw id="43" radius="2.000"/>
+    <vdw id="44" radius="2.000"/>
+    <vdw id="45" radius="2.000"/>
+    <vdw id="46" radius="1.630"/>
+    <vdw id="47" radius="1.720"/>
+    <vdw id="48" radius="1.580"/>
+    <vdw id="49" radius="1.930"/>
+    <vdw id="50" radius="2.170"/>
+    <vdw id="51" radius="2.060"/>
+    <vdw id="52" radius="2.060"/>
+    <vdw id="53" radius="1.980"/>
+    <vdw id="54" radius="2.160"/>
+    <vdw id="55" radius="3.430"/>
+    <vdw id="56" radius="2.680"/>
+    <vdw id="57" radius="2.000"/>
+    <vdw id="58" radius="2.000"/>
+    <vdw id="59" radius="2.000"/>
+    <vdw id="60" radius="2.000"/>
+    <vdw id="61" radius="2.000"/>
+    <vdw id="62" radius="2.000"/>
+    <vdw id="63" radius="2.000"/>
+    <vdw id="64" radius="2.000"/>
+    <vdw id="65" radius="2.000"/>
+    <vdw id="66" radius="2.000"/>
+    <vdw id="67" radius="2.000"/>
+    <vdw id="68" radius="2.000"/>
+    <vdw id="69" radius="2.000"/>
+    <vdw id="70" radius="2.000"/>
+    <vdw id="71" radius="2.000"/>
+    <vdw id="72" radius="2.000"/>
+    <vdw id="73" radius="2.000"/>
+    <vdw id="74" radius="2.000"/>
+    <vdw id="75" radius="2.000"/>
+    <vdw id="76" radius="2.000"/>
+    <vdw id="77" radius="2.000"/>
+    <vdw id="78" radius="1.750"/>
+    <vdw id="79" radius="1.660"/>
+    <vdw id="80" radius="1.550"/>
+    <vdw id="81" radius="1.960"/>
+    <vdw id="82" radius="2.020"/>
+    <vdw id="83" radius="2.070"/>
+    <vdw id="84" radius="1.970"/>
+    <vdw id="85" radius="2.020"/>
+    <vdw id="86" radius="2.200"/>
+    <vdw id="87" radius="3.480"/>
+    <vdw id="88" radius="2.830"/>
+    <vdw id="89" radius="2.000"/>
+    <vdw id="90" radius="2.000"/>
+    <vdw id="91" radius="2.000"/>
+    <vdw id="92" radius="1.860"/>
+    <vdw id="93" radius="2.000"/>
+    <vdw id="94" radius="2.000"/>
+    <vdw id="95" radius="2.000"/>
+    <vdw id="96" radius="2.000"/>
+    <vdw id="97" radius="2.000"/>
+    <vdw id="98" radius="2.000"/>
+    <vdw id="99" radius="2.000"/>
+    <vdw id="100" radius="2.000"/>
+    <vdw id="101" radius="2.000"/>
+    <vdw id="102" radius="2.000"/>
+    <vdw id="103" radius="2.000"/>
+    <vdw id="104" radius="2.000"/>
+    <vdw id="105" radius="2.000"/>
+    <vdw id="106" radius="2.000"/>
+    <vdw id="107" radius="2.000"/>
+    <vdw id="108" radius="2.000"/>
+    <vdw id="109" radius="2.000"/>
+    <vdw id="110" radius="2.000"/>
+    <vdw id="111" radius="2.000"/>
+    <vdw id="112" radius="2.000"/>
+    <vdw id="113" radius="1.200"/>
+    <vdw id="114" radius="1.520"/>
+    <vdw id="115" radius="1.200"/>
+</scheme>
+</root>
