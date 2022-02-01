@@ -84,6 +84,8 @@ float HitSphereInside(Ray ray, vec3 center, float radius)
 const float MIN_DISTANCE = -0.001;
 const float MAX_DISTANCE = 1000000000.0;
 
+uniform int uSpheresCount;
+
 Intersection FindNearestIntersection(Ray ray)
 {
 	Intersection intersection;
@@ -92,7 +94,7 @@ Intersection FindNearestIntersection(Ray ray)
 	intersection.ray = ray;
 
 	// Check for scene spheres intersections
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < uSpheresCount; ++i)
 	{
 		vec3 p = bufferSpheres[i].center.xyz;
 		float t = HitSphereOutside(ray, p, bufferSpheres[i].properties.x);
@@ -130,12 +132,14 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 		return bufferSpheres[intersection.sphereIndex].surfaceColor.rgb;
 }
 
-uniform int uMaxDepth = 4;
-Intersection[16] gIntersections;
-vec3 gColors[4];
+uniform int uMaxDepth = 1;
+
 vec3 trace(Ray primaryRay)
 {
-	for (int i = 0; i < 16; ++i)
+	Intersection[2] gIntersections;
+	vec3 gColors[1];
+
+	for (int i = 0; i < 2; ++i)
 		gIntersections[i].sphereIndex = -3;
 	// Generate all intersections
 	{
@@ -217,7 +221,6 @@ vec3 trace(Ray primaryRay)
 
 void main()
 {
-	//spheres = ParseBufferSpheres();
 	Ray ray;
 	ray.origin = vOrigin;
 	ray.dir = normalize(vRay);

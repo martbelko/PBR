@@ -107,14 +107,14 @@ static uint32_t LoadCubemap(const std::vector<std::string>& faces)
 	return textureID;
 }
 
-static void UploadDataToGPU(const AtomLoader& loader)
+static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 {
-	/*struct Sphere
+	struct Sphere
 	{
 		float radius;
-		float transparency;
-		float reflection;
-		float _unused;
+		float transparency = 0.0f;
+		float reflection = 0.0f;
+		float _unused = 0.0f;
 		glm::vec4 position;
 		glm::vec4 color;
 	};
@@ -130,15 +130,18 @@ static void UploadDataToGPU(const AtomLoader& loader)
 		sphere.position = glm::vec4(atom.position, 0.0f);
 		sphere.color = glm::vec4(t->color, 1.0f);
 		sphere.radius = t->radius;
+		spheres.push_back(std::move(sphere));
 	}
 
 	GLuint ssbo;
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, spheres.size() * sizeof(Sphere), spheres.data(), GL_STATIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);*/
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
 
-	float spheres[] = {
+	shader->SetInt("uSpheresCount", spheres.size());
+
+	/*float spheres[] = {
 		// Radius Transparency Reflect Unused | Position | Surface color
 		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -150,7 +153,7 @@ static void UploadDataToGPU(const AtomLoader& loader)
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(spheres), spheres, GL_STATIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);*/
 }
 
 void MainLayer::OnAttach()
@@ -158,20 +161,6 @@ void MainLayer::OnAttach()
 	mWindow.DisableCursor();
 
 	glEnable(GL_DEPTH_TEST);
-
-	float spheres[] = {
-		// Radius Transparency Reflect Unused | Position | Surface color
-		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 0.33f, 0.33f, 0.33f, 1.0f
-	};
-
-	/*GLuint ssbo;
-	glGenBuffers(1, &ssbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(spheres), spheres, GL_STATIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);*/
 
 	mRaytraceShader->Bind();
 	mRaytraceShader->SetFloat3("uLightPosition", glm::vec3(5.0f, 5.0f, 5.0f));
@@ -187,7 +176,7 @@ void MainLayer::OnAttach()
 	mCubemap = LoadCubemap(faces);
 
 	AtomLoader loader("assets/data/1cqw.pdb", "assets/data/test.xml");
-	UploadDataToGPU(loader);
+	UploadDataToGPU(mRaytraceShader, loader);
 }
 
 void MainLayer::OnUpdate(Timestep ts)
