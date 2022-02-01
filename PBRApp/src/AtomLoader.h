@@ -31,9 +31,9 @@ class AtomLoader
 public:
 	AtomLoader(const std::string& pdbPath, const std::string& xmlPath);
 
-	std::unordered_map<std::string, Residue> GetResidues() { return mResidues; }
-	std::unordered_map<char, AtomTemplate> GetAtomTemplates() { return mAtomTemplates; }
-	std::vector<Atom> GetAtoms() { return mAtoms; }
+	const std::unordered_map<std::string, Residue>& GetResidues() const { return mResidues; }
+	const std::unordered_map<char, AtomTemplate>& GetAtomTemplates() const { return mAtomTemplates; }
+	const std::vector<Atom>& GetAtoms() const { return mAtoms; }
 private:
 	std::unordered_map<std::string, Residue> mResidues;
 	std::unordered_map<char, AtomTemplate> mAtomTemplates;

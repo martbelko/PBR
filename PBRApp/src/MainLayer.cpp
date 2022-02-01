@@ -97,6 +97,7 @@ static uint32_t LoadCubemap(const std::vector<std::string>& faces)
 			stbi_image_free(data);
 		}
 	}
+
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -104,6 +105,52 @@ static uint32_t LoadCubemap(const std::vector<std::string>& faces)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	return textureID;
+}
+
+static void UploadDataToGPU(const AtomLoader& loader)
+{
+	/*struct Sphere
+	{
+		float radius;
+		float transparency;
+		float reflection;
+		float _unused;
+		glm::vec4 position;
+		glm::vec4 color;
+	};
+
+	const auto& atoms = loader.GetAtoms();
+	const auto& atomTemplates = loader.GetAtomTemplates();
+	std::vector<Sphere> spheres;
+	spheres.reserve(atoms.size());
+	for (const Atom& atom : atoms)
+	{
+		const AtomTemplate* t = atom.atomTemplate;
+		Sphere sphere;
+		sphere.position = glm::vec4(atom.position, 0.0f);
+		sphere.color = glm::vec4(t->color, 1.0f);
+		sphere.radius = t->radius;
+	}
+
+	GLuint ssbo;
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, spheres.size() * sizeof(Sphere), spheres.data(), GL_STATIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);*/
+
+	float spheres[] = {
+		// Radius Transparency Reflect Unused | Position | Surface color
+		1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 0.33f, 0.33f, 0.33f, 1.0f
+	};
+
+	GLuint ssbo;
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(spheres), spheres, GL_STATIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
 }
 
 void MainLayer::OnAttach()
@@ -120,11 +167,11 @@ void MainLayer::OnAttach()
 		1.0f, 0.0f, 0.0f, 0.0f , -2.0f, -2.0f, -1.0f, 0.0f, 0.33f, 0.33f, 0.33f, 1.0f
 	};
 
-	GLuint ssbo;
+	/*GLuint ssbo;
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(spheres), spheres, GL_STATIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);*/
 
 	mRaytraceShader->Bind();
 	mRaytraceShader->SetFloat3("uLightPosition", glm::vec3(5.0f, 5.0f, 5.0f));
@@ -140,6 +187,7 @@ void MainLayer::OnAttach()
 	mCubemap = LoadCubemap(faces);
 
 	AtomLoader loader("assets/data/1cqw.pdb", "assets/data/test.xml");
+	UploadDataToGPU(loader);
 }
 
 void MainLayer::OnUpdate(Timestep ts)

@@ -366,5 +366,4 @@ AtomLoader::AtomLoader(const std::string& pdbPath, const std::string& xmlPath)
 	mResidues = LoadResidues(fileMapping);
 	mAtomTemplates = LoadAtomTemplates(fileMapping);
 	mAtoms = LoadAtoms(pdbPath, mAtomTemplates, mResidues);
-	int x = 6;
 }
