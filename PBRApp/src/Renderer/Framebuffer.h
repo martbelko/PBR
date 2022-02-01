@@ -15,6 +15,11 @@ enum class FramebufferTextureFormat
 	// Depth/stencil
 	DEPTH24STENCIL8,
 
+	// Custom
+	Float32,
+	Vec3,
+	Vec4,
+
 	// Defaults
 	Depth = DEPTH24STENCIL8
 };
@@ -62,9 +67,7 @@ public:
 
 	void ClearAttachment(uint32_t attachmentIndex, int value);
 
-	uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const;
-
-	const FramebufferSpecification& GetSpecification() const;
+	const FramebufferSpecification& GetSpecification() const { return m_Specification; }
 private:
 	uint32_t m_RendererID = 0;
 	FramebufferSpecification m_Specification;

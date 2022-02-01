@@ -33,13 +33,13 @@ namespace Utils {
 		}
 		else
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+			glTextureSubImage2D(id, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(id, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		}
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, TextureTarget(multisampled), id, 0);
@@ -82,6 +82,9 @@ namespace Utils {
 		{
 			case FramebufferTextureFormat::RGBA8: return GL_RGBA8;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			case FramebufferTextureFormat::Float32: return GL_R32F;
+			case FramebufferTextureFormat::Vec3: return GL_RGB32F;
+			case FramebufferTextureFormat::Vec4: return GL_RGBA32F;
 		}
 
 		assert(false);

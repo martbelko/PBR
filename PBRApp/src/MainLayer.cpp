@@ -33,6 +33,7 @@
 #include "Renderer/Camera.h"
 
 #include "AtomLoader.h"
+#include "Renderer\Framebuffer.h"
 
 class Quad
 {
@@ -140,6 +141,16 @@ static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
 
 	shader->SetInt("uSpheresCount", spheres.size());
+
+	FramebufferSpecification fbSpec;
+	fbSpec.attachments = { FramebufferTextureFormat::Float32 };
+	fbSpec.width = 1280;
+	fbSpec.height = 720;
+	// Framebuffer f(fbSpec);
+
+	GLint maxAttach = 0;
+	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxAttach);
+	std::cout << maxAttach << '\n';
 }
 
 void MainLayer::OnAttach()
@@ -197,7 +208,7 @@ void MainLayer::OnImGuiRender()
 		static int depth = 3;
 		if (ImGui::DragFloat("Camera speed", &cameraSpeed, 0.1f, 0.01f, 1000.0f))
 			mCamera.SetSpeed(cameraSpeed);
-		if (ImGui::DragFloat("Camera mouse sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
+		if (ImGui::DragFloat("Camera sensitivity", &cameraSens, 0.1f, 0.01f, 1000.0f))
 			mCamera.SetMouseSensitivity(cameraSens);
 	}
 	ImGui::End();
