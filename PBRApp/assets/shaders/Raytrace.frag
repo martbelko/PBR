@@ -13,15 +13,6 @@ struct BufferSphere // std430 layout
 	vec4 surfaceColor;
 };
 
-struct Sphere // Internal struct
-{
-	float radius;
-	float transparency;
-	float reflection;
-	vec3 center;
-	vec3 surfaceColor;
-};
-
 struct Ray
 {
 	vec3 origin;
@@ -43,24 +34,6 @@ layout(std430, binding = 0) buffer Spheres
 };
 
 out vec4 oFragColor;
-
-Sphere[4] ParseBufferSpheres()
-{
-	Sphere spheres[4];
-
-	for (int i = 0; i < 4; ++i)
-	{
-		spheres[i].radius = bufferSpheres[i].properties.x;
-		spheres[i].transparency = bufferSpheres[i].properties.y;
-		spheres[i].reflection = bufferSpheres[i].properties.z;
-		spheres[i].center = bufferSpheres[i].center.xyz;
-		spheres[i].surfaceColor = bufferSpheres[i].surfaceColor.rgb;
-	}
-
-	return spheres;
-}
-
-Sphere[4] spheres;
 
 const vec3 lightColor = vec3(1.0, 0.0, 1.0);
 const float lightPower = 40.0;
@@ -121,13 +94,13 @@ Intersection FindNearestIntersection(Ray ray)
 	// Check for scene spheres intersections
 	for (int i = 0; i < 4; ++i)
 	{
-		vec3 p = spheres[i].center;
-		float t = HitSphereOutside(ray, p, spheres[i].radius);
+		vec3 p = bufferSpheres[i].center.xyz;
+		float t = HitSphereOutside(ray, p, bufferSpheres[i].properties.x);
 		if (t > MIN_DISTANCE && t < intersection.distance)
 		{
 			intersection.distance = t;
 			intersection.hitPoint = ray.origin + t * ray.dir;
-			intersection.normal = normalize(intersection.hitPoint - spheres[i].center);
+			intersection.normal = normalize(intersection.hitPoint - bufferSpheres[i].center.xyz);
 			intersection.sphereIndex = i;
 		}
 	}
@@ -154,7 +127,7 @@ vec3 GetFragColorFromIntersection(Intersection intersection)
 	else if (intersection.sphereIndex == -3)
 		return vec3(0.0);
 	else
-		return spheres[intersection.sphereIndex].surfaceColor;
+		return bufferSpheres[intersection.sphereIndex].surfaceColor.rgb;
 }
 
 uniform int uMaxDepth = 4;
@@ -192,9 +165,9 @@ vec3 trace(Ray primaryRay)
 					vec3 refractDir = normalize(refract(intersection.ray.dir, intersection.normal, 1.0 / 1.45));
 					Ray refractRay = Ray(intersection.hitPoint + 0.001 * refractDir, refractDir);
 					int index = intersection.sphereIndex;
-					float dist = HitSphereInside(refractRay, spheres[index].center, spheres[index].radius);
+					float dist = HitSphereInside(refractRay, bufferSpheres[index].center.xyz, bufferSpheres[index].properties.x);
 					vec3 hitPoint = refractRay.origin + dist * refractRay.dir;
-					vec3 normal = -normalize(hitPoint - spheres[index].center);
+					vec3 normal = -normalize(hitPoint - bufferSpheres[index].center.xyz);
 
 					refractRay.dir = normalize(refract(refractRay.dir, normal, 1.45));
 					refractRay.origin = hitPoint + 0.001 * refractRay.dir;
@@ -244,7 +217,7 @@ vec3 trace(Ray primaryRay)
 
 void main()
 {
-	spheres = ParseBufferSpheres();
+	//spheres = ParseBufferSpheres();
 	Ray ray;
 	ray.origin = vOrigin;
 	ray.dir = normalize(vRay);
