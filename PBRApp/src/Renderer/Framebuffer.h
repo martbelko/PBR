@@ -43,15 +43,13 @@ struct FramebufferSpecification
 	uint32_t width = 0, height = 0;
 	FramebufferAttachmentSpecification attachments;
 	uint32_t samples = 1;
-
-	bool swapChainTarget = false;
 };
 
 class Framebuffer
 {
 public:
 	Framebuffer(const FramebufferSpecification& specification);
-	~Framebuffer() = default;
+	~Framebuffer();
 public:
 	void Bind();
 	void Unbind();
