@@ -22,7 +22,9 @@ static void GotoLine(std::ifstream& file, uint64_t num)
 {
 	file.seekg(std::ios::beg);
 	for (uint64_t i = 0; i < num; ++i)
+	{
 		file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
 }
 
 static std::string FindPropertyInXMLLine(const std::string& line, const std::string& prop)
@@ -30,7 +32,7 @@ static std::string FindPropertyInXMLLine(const std::string& line, const std::str
 	uint64_t startPos = line.find(prop + '=');
 	if (startPos == std::string::npos)
 	{
-		std::cerr << "Could not find 'identifier' in the line " << line;
+		std::cerr << "Could not find " << prop << " in the line " << line;
 		return "";
 	}
 
@@ -66,7 +68,9 @@ static std::unordered_map<std::string, Residue> LoadResidues(const FileMapping& 
 {
 	std::ifstream file(fileMapping.filepath);
 	if (!file)
+	{
 		return {};
+	}
 
 	std::unordered_map<uint64_t, glm::vec3> colors;
 	GotoLine(file, fileMapping.residues.first);
@@ -120,11 +124,13 @@ static std::unordered_map<char, AtomTemplate> LoadAtomTemplates(const FileMappin
 {
 	std::ifstream file(fileMapping.filepath);
 	if (!file)
+	{
 		return {};
+	}
 
 	GotoLine(file, fileMapping.atoms.first);
 	std::unordered_map<uint64_t, glm::vec3> colors;
-	for (uint64_t i = 0; i < fileMapping.atoms.second; ++i)
+	for (uint64_t i = fileMapping.atoms.first; i < fileMapping.atoms.second; ++i)
 	{
 		std::string line;
 		std::getline(file, line);
@@ -211,17 +217,18 @@ static std::vector<Atom> LoadAtoms(const std::string& pdbPath, std::unordered_ma
 		if (line._Starts_with("ATOM"))
 		{
 			std::istringstream iss(line);
-			std::string temp[3];
+			std::string temp[2];
+			std::string residueString;
 			std::string atomTag;
 			uint64_t atomId, residueId;
 			glm::vec3 position;
 
 			// ATOM 1 N ILE A 15 11.749 81.774 51.160 1.00 13.80 N
-			iss >> temp[0] >> atomId >> atomTag >> temp[1] >> temp[2] >> residueId >> position[0] >> position[1] >> position[2];
+			iss >> temp[0] >> atomId >> atomTag >> residueString >> temp[1] >> residueId >> position[0] >> position[1] >> position[2];
 
 			Atom atom;
-			char e = atomTag[0];
-			atom.atomTemplate = &atomTemplates['a'];
+			char element = atomTag[0];
+			atom.atomTemplate = &atomTemplates[element];
 			atom.position = position;
 			atom.residue = &residues[temp[1]];
 			atoms.push_back(std::move(atom));
@@ -231,44 +238,6 @@ static std::vector<Atom> LoadAtoms(const std::string& pdbPath, std::unordered_ma
 	file.close();
 	return atoms;
 }
-
-/*static std::unordered_map<char, Atom> LoadMainPath(const std::string& mainPath)
-{
-	std::vector<Atom> atoms;
-	std::ifstream file(mainPath);
-	if (!file)
-	{
-		std::cerr << "Could not open " << mainPath << '\n';
-		return {};
-	}
-
-	std::string line;
-	while (std::getline(file, line))
-	{
-		if (line._Starts_with("ATOM"))
-		{
-			std::istringstream iss(line);
-			std::string temp[3];
-			std::string atomTag;
-			uint64_t atomId, residueId;
-			glm::vec3 position;
-
-			// ATOM 1 N ILE A 15 11.749 81.774 51.160 1.00 13.80 N
-			iss >> temp[0] >> atomId >> atomTag >> temp[1] >> temp[2] >> residueId >> position[0] >> position[1] >> position[2];
-
-			Atom atom;
-
-			atom.pdbId = atomId;
-			atom.element = atomTag[0];
-			atom.position = position;
-			atom.color = glm::vec3(1.0f, 0.0f, 0.0f); // Will set this later
-			atoms.push_back(std::move(atom));
-		}
-	}
-
-	file.close();
-	return atoms;
-}*/
 
 static FileMapping PreProcessXML(const std::string& xmlPath)
 {
