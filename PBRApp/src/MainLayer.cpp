@@ -31,9 +31,10 @@
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Camera.h"
+#include "Renderer\Framebuffer.h"
 
 #include "AtomLoader.h"
-#include "Renderer\Framebuffer.h"
+#include "AtomKDTree.h"
 
 class Quad
 {
@@ -148,9 +149,7 @@ static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 	fbSpec.height = 720;
 	// Framebuffer f(fbSpec);
 
-	GLint maxAttach = 0;
-	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxAttach);
-	std::cout << maxAttach << '\n';
+	AtomKDTree tree = AtomKDTree(atoms);
 }
 
 void MainLayer::OnAttach()
