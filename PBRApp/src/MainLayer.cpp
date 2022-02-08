@@ -109,6 +109,50 @@ static uint32_t LoadCubemap(const std::vector<std::string>& faces)
 	return textureID;
 }
 
+struct ArrayNode
+{
+	glm::vec4 boxMin;
+	glm::vec4 boxMax;
+	glm::ivec4 childIndices;
+	int atomIndices[10] = { -1 };
+};
+
+static void CreateArrayNodes(std::vector<ArrayNode>& kdTreeArray, int& index, const AtomKDTree* currentNode)
+{
+	kdTreeArray.emplace_back();
+	size_t curIndex = kdTreeArray.size() - 1;
+	int leftChildIndex = -1, rightChildIndex = -1;
+	if (currentNode->GetLeftChild())
+	{
+		leftChildIndex = ++index;
+		CreateArrayNodes(kdTreeArray, index, currentNode->GetLeftChild());
+	}
+	if (currentNode->GetRightChild())
+	{
+		rightChildIndex = ++index;
+		CreateArrayNodes(kdTreeArray, index, currentNode->GetRightChild());
+	}
+
+	ArrayNode& node = kdTreeArray[curIndex];
+	for (int i = 0; i < 10; ++i)
+	{
+		node.atomIndices[i] = -1;
+	}
+
+	node.boxMin = glm::vec4(currentNode->GetBoxMin(), 0.0f);
+	node.boxMax = glm::vec4(currentNode->GetBoxMax(), 0.0f);
+	if (!currentNode->GetAtoms().empty())
+	{
+		for (size_t i = 0; i < currentNode->GetAtoms().size(); ++i)
+		{
+			node.atomIndices[i] = currentNode->GetAtoms()[i].index;
+		}
+	}
+
+	node.childIndices[0] = leftChildIndex;
+	node.childIndices[1] = rightChildIndex;
+};
+
 static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 {
 	struct Sphere
@@ -135,11 +179,13 @@ static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 		spheres.push_back(std::move(sphere));
 	}
 
-	GLuint ssbo;
-	glGenBuffers(1, &ssbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, spheres.size() * sizeof(Sphere), spheres.data(), GL_STATIC_DRAW);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+	{
+		GLuint ssbo;
+		glGenBuffers(1, &ssbo);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, spheres.size() * sizeof(Sphere), spheres.data(), GL_STATIC_DRAW);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+	}
 
 	shader->SetInt("uSpheresCount", spheres.size());
 
@@ -150,6 +196,18 @@ static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 	// Framebuffer f(fbSpec);
 
 	AtomKDTree tree = AtomKDTree(atoms);
+	std::vector<ArrayNode> kdTreeArray;
+	int index = 0;
+	CreateArrayNodes(kdTreeArray, index, &tree);
+	{
+		GLuint ssbo;
+		glGenBuffers(1, &ssbo);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, kdTreeArray.size() * sizeof(ArrayNode), kdTreeArray.data(), GL_STATIC_DRAW);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+	}
+
+	shader->SetInt("uKDTreeNodesCount", kdTreeArray.size());
 }
 
 void MainLayer::OnAttach()

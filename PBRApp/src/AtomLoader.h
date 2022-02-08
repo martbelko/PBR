@@ -24,6 +24,7 @@ struct Atom
 	glm::vec3 position;
 	const AtomTemplate* atomTemplate;
 	Residue* residue;
+	uint32_t index;
 };
 
 class AtomLoader

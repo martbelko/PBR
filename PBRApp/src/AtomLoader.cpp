@@ -231,6 +231,7 @@ static std::vector<Atom> LoadAtoms(const std::string& pdbPath, std::unordered_ma
 			atom.atomTemplate = &atomTemplates[element];
 			atom.position = position;
 			atom.residue = &residues[temp[1]];
+			atom.index = atoms.size();
 			atoms.push_back(std::move(atom));
 		}
 	}

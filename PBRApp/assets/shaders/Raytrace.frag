@@ -6,6 +6,15 @@ in vec3 vRay;
 uniform vec3 uLightPosition;
 uniform samplerCube uCubemap;
 
+const uint KDTREE_MAX_INDICES = 10;
+struct KDTreeNode // std430 layout
+{
+	vec4 boxMin; // vec3
+	vec4 boxMax; // vec3
+	ivec4 childIndices; // ivec2
+	int atomIndices[KDTREE_MAX_INDICES]; // Maximum of 10
+};
+
 struct BufferSphere // std430 layout
 {
 	vec4 properties; // x = radius, y = transparency, z = reflection
@@ -31,6 +40,11 @@ struct Intersection
 layout(std430, binding = 0) buffer Spheres
 {
 	BufferSphere bufferSpheres[];
+};
+
+layout(std430, binding = 1) buffer KDTree
+{
+	KDTreeNode nodes[];
 };
 
 out vec4 oFragColor;
@@ -85,6 +99,19 @@ const float MIN_DISTANCE = -0.001;
 const float MAX_DISTANCE = 1000000000.0;
 
 uniform int uSpheresCount;
+uniform int uKDTreeNodesCount;
+
+bool IntersectAABB(Ray ray, vec3 boxMin, vec3 boxMax)
+{
+	vec3 tMin = (boxMin - ray.origin) / ray.dir;
+	vec3 tMax = (boxMax - ray.origin) / ray.dir;
+	vec3 t1 = min(tMin, tMax);
+	vec3 t2 = max(tMin, tMax);
+	float tNear = max(max(t1.x, t1.y), t1.z);
+	float tFar = min(min(t2.x, t2.y), t2.z);
+
+	return tNear <= tFar;
+};
 
 Intersection FindNearestIntersection(Ray ray)
 {
@@ -93,17 +120,38 @@ Intersection FindNearestIntersection(Ray ray)
 	intersection.distance = MAX_DISTANCE;
 	intersection.ray = ray;
 
-	// Check for scene spheres intersections
-	for (int i = 0; i < uSpheresCount; ++i)
+	nodes[0].boxMin.xyz = vec3(-18, 72, 11);
+	nodes[0].boxMax.xyz = vec3(46, 124, 60);
+	if (IntersectAABB(ray, nodes[0].boxMin.xyz, nodes[0].boxMax.xyz))
 	{
-		vec3 p = bufferSpheres[i].center.xyz;
-		float t = HitSphereOutside(ray, p, bufferSpheres[i].properties.x);
-		if (t > MIN_DISTANCE && t < intersection.distance)
+		/*int index = 1;
+		while (true)
 		{
-			intersection.distance = t;
-			intersection.hitPoint = ray.origin + t * ray.dir;
-			intersection.normal = normalize(intersection.hitPoint - bufferSpheres[i].center.xyz);
-			intersection.sphereIndex = i;
+			int leftIndex = nodes[index].childIndices[0];
+			int rightIndex = nodes[index].childIndices[1];
+
+			if (leftIndex != -1)
+			{
+				KDTreeNode node = nodes[leftIndex];
+				if (IntersectAABB(ray.origin, ray.dir, node.boxMin.xyz, node.boxMax.xyz))
+				{
+
+				}
+			}
+		}*/
+
+		// Check for scene spheres intersections
+		for (int i = 0; i < uSpheresCount; ++i)
+		{
+			vec3 p = bufferSpheres[i].center.xyz;
+			float t = HitSphereOutside(ray, p, bufferSpheres[i].properties.x);
+			if (t > MIN_DISTANCE && t < intersection.distance)
+			{
+				intersection.distance = t;
+				intersection.hitPoint = ray.origin + t * ray.dir;
+				intersection.normal = normalize(intersection.hitPoint - bufferSpheres[i].center.xyz);
+				intersection.sphereIndex = i;
+			}
 		}
 	}
 

@@ -7,9 +7,7 @@
 class AtomKDTree
 {
 public:
-	AtomKDTree(const std::vector<Atom>& atoms)
-		: AtomKDTree(std::vector<Atom>(atoms), 0) { }
-
+	AtomKDTree(const std::vector<Atom>& atoms);
 	~AtomKDTree();
 
 	const AtomKDTree* GetLeftChild() const { return m_LeftChild; }
@@ -19,6 +17,8 @@ public:
 	const std::vector<Atom>& GetAtoms() const { return m_Atoms; }
 private:
 	AtomKDTree(std::vector<Atom>&& atoms, uint32_t depth);
+
+	void AAtomKDTree(std::vector<Atom>&& atoms, uint32_t depth);
 private:
 	glm::vec3 m_BoxMin;
 	glm::vec3 m_BoxMax;

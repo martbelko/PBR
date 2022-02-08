@@ -1,25 +1,58 @@
 #include "AtomKDTree.h"
 
+#include <array>
 #include <limits>
 
+AtomKDTree::AtomKDTree(const std::vector<Atom>& atoms)
+{
+	constexpr float minFloat = std::numeric_limits<float>::min();
+	constexpr float maxFloat = std::numeric_limits<float>::max();
+	for (int i = 0; i < 3; ++i)
+	{
+		m_BoxMin[i] = maxFloat;
+		m_BoxMax[i] = minFloat;
+	}
+
+	for (const Atom& atom : atoms)
+	{
+		float radius = atom.atomTemplate->radius;
+		for (int i = 0; i < 3; ++i)
+		{
+			const float currMin = atom.position[i] - radius;
+			const float currMax = atom.position[i] + radius;
+
+			if (currMin < m_BoxMin[i])
+			{
+				m_BoxMin[i] = currMin;
+			}
+			if (currMax > m_BoxMax[i])
+			{
+				m_BoxMax[i] = currMax;
+			}
+		}
+	}
+
+	AAtomKDTree(std::vector<Atom>(atoms), 0);
+}
+
 AtomKDTree::AtomKDTree(std::vector<Atom>&& atoms, uint32_t depth)
+{
+	AAtomKDTree(std::move(atoms), depth);
+}
+
+void AtomKDTree::AAtomKDTree(std::vector<Atom>&& atoms, uint32_t depth)
 {
 	constexpr uint32_t AXIS_COUNT = 3;
 	uint32_t axis = depth % AXIS_COUNT;
 
-	constexpr float minFloat = std::numeric_limits<float>::min();
-	constexpr float maxFloat = std::numeric_limits<float>::max();
-	m_BoxMin[axis] = maxFloat;
-	m_BoxMax[axis] = minFloat;
-
-	for (const Atom& atom : atoms)
+	float totalRadius = 0.0f;
+	for (const auto& atom : atoms)
 	{
-		const glm::vec3& pos = atom.position;
-		m_BoxMin[axis] = std::min(m_BoxMin[axis], pos[axis] - atom.atomTemplate->radius);
-		m_BoxMax[axis] = std::max(m_BoxMax[axis], pos[axis] + atom.atomTemplate->radius);
+		totalRadius += atom.atomTemplate->radius;
 	}
 
-	float half = (m_BoxMin[axis] + m_BoxMax[axis]) / 2.0f;
+	// float half = (m_BoxMin[axis] + m_BoxMax[axis]) / 2.0f;
+	float half = totalRadius / atoms.size();
 	std::vector<Atom> left, right;
 	for (const Atom& atom : atoms)
 	{
