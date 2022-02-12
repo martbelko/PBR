@@ -109,12 +109,13 @@ static uint32_t LoadCubemap(const std::vector<std::string>& faces)
 	return textureID;
 }
 
+static constexpr uint32_t KDTREE_MAX_ATOM_INDICES = 12;
 struct ArrayNode
 {
 	glm::vec4 boxMin;
 	glm::vec4 boxMax;
 	glm::ivec4 childIndices;
-	int atomIndices[10] = { -1 };
+	int atomIndices[KDTREE_MAX_ATOM_INDICES] = { -1 };
 };
 
 static void CreateArrayNodes(std::vector<ArrayNode>& kdTreeArray, int& index, const AtomKDTree* currentNode)
@@ -122,19 +123,17 @@ static void CreateArrayNodes(std::vector<ArrayNode>& kdTreeArray, int& index, co
 	kdTreeArray.emplace_back();
 	size_t curIndex = kdTreeArray.size() - 1;
 	int leftChildIndex = -1, rightChildIndex = -1;
+
 	if (currentNode->GetLeftChild())
 	{
 		leftChildIndex = ++index;
 		CreateArrayNodes(kdTreeArray, index, currentNode->GetLeftChild());
-	}
-	if (currentNode->GetRightChild())
-	{
 		rightChildIndex = ++index;
 		CreateArrayNodes(kdTreeArray, index, currentNode->GetRightChild());
 	}
 
 	ArrayNode& node = kdTreeArray[curIndex];
-	for (int i = 0; i < 10; ++i)
+	for (uint32_t i = 0; i < KDTREE_MAX_ATOM_INDICES; ++i)
 	{
 		node.atomIndices[i] = -1;
 	}
@@ -152,6 +151,8 @@ static void CreateArrayNodes(std::vector<ArrayNode>& kdTreeArray, int& index, co
 	node.childIndices[0] = leftChildIndex;
 	node.childIndices[1] = rightChildIndex;
 };
+
+#include <set>
 
 static void UploadDataToGPU(const Ref<Shader>& shader, const AtomLoader& loader)
 {

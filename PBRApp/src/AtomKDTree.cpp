@@ -35,7 +35,8 @@ AtomKDTree::AtomKDTree(const std::vector<Atom>& atoms)
 	AAtomKDTree(std::vector<Atom>(atoms), 0);
 }
 
-AtomKDTree::AtomKDTree(std::vector<Atom>&& atoms, uint32_t depth)
+AtomKDTree::AtomKDTree(std::vector<Atom>&& atoms, const glm::vec3& boxMin, const glm::vec3& boxMax, uint32_t depth)
+	: m_BoxMin(boxMin), m_BoxMax(boxMax)
 {
 	AAtomKDTree(std::move(atoms), depth);
 }
@@ -45,14 +46,13 @@ void AtomKDTree::AAtomKDTree(std::vector<Atom>&& atoms, uint32_t depth)
 	constexpr uint32_t AXIS_COUNT = 3;
 	uint32_t axis = depth % AXIS_COUNT;
 
-	float totalRadius = 0.0f;
+	float totalAxisSum = 0.0f;
 	for (const auto& atom : atoms)
 	{
-		totalRadius += atom.atomTemplate->radius;
+		totalAxisSum += atom.position[axis];
 	}
 
-	// float half = (m_BoxMin[axis] + m_BoxMax[axis]) / 2.0f;
-	float half = totalRadius / atoms.size();
+	float half = totalAxisSum / atoms.size();
 	std::vector<Atom> left, right;
 	for (const Atom& atom : atoms)
 	{
@@ -64,33 +64,23 @@ void AtomKDTree::AAtomKDTree(std::vector<Atom>&& atoms, uint32_t depth)
 		{
 			right.emplace_back(atom);
 		}
-		else
-		{
-			left.emplace_back(atom);
-			right.emplace_back(atom);
-		}
 	}
 
-	constexpr size_t minCount = 10;
+	constexpr size_t minCount = 12;
 	if (left.size() + right.size() <= minCount)
 	{
 		m_Atoms = std::move(left);
 		m_Atoms.insert(m_Atoms.end(), std::make_move_iterator(right.begin()), std::make_move_iterator(right.end()));
 	}
-	else if (left.size() <= minCount)
-	{
-		m_Atoms = std::move(left);
-		m_RightChild = new AtomKDTree(std::move(right), depth + 1);
-	}
-	else if (right.size() <= minCount)
-	{
-		m_Atoms = std::move(right);
-		m_LeftChild = new AtomKDTree(std::move(left), depth + 1);
-	}
 	else
 	{
-		m_LeftChild = new AtomKDTree(std::move(left), depth + 1);
-		m_RightChild = new AtomKDTree(std::move(right), depth + 1);
+		glm::vec3 minHalfBounds = m_BoxMin;
+		glm::vec3 maxHalfBounds = m_BoxMax;
+		minHalfBounds[axis] = half;
+		maxHalfBounds[axis] = half;
+
+		m_LeftChild = new AtomKDTree(std::move(left), m_BoxMin, maxHalfBounds, depth + 1);
+		m_RightChild = new AtomKDTree(std::move(right), minHalfBounds, m_BoxMax, depth + 1);
 	}
 }
 

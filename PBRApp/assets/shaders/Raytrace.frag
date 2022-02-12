@@ -6,13 +6,13 @@ in vec3 vRay;
 uniform vec3 uLightPosition;
 uniform samplerCube uCubemap;
 
-const uint KDTREE_MAX_INDICES = 10;
+const uint KDTREE_MAX_INDICES = 12; // Multiple of 4
 struct KDTreeNode // std430 layout
 {
 	vec4 boxMin; // vec3
 	vec4 boxMax; // vec3
 	ivec4 childIndices; // ivec2
-	int atomIndices[KDTREE_MAX_INDICES]; // Maximum of 10
+	int atomIndices[KDTREE_MAX_INDICES];
 };
 
 struct BufferSphere // std430 layout
@@ -101,7 +101,7 @@ const float MAX_DISTANCE = 1000000000.0;
 uniform int uSpheresCount;
 uniform int uKDTreeNodesCount;
 
-bool IntersectAABB(Ray ray, vec3 boxMin, vec3 boxMax)
+float IntersectAABB(Ray ray, vec3 boxMin, vec3 boxMax)
 {
 	vec3 tMin = (boxMin - ray.origin) / ray.dir;
 	vec3 tMax = (boxMax - ray.origin) / ray.dir;
@@ -110,8 +110,13 @@ bool IntersectAABB(Ray ray, vec3 boxMin, vec3 boxMax)
 	float tNear = max(max(t1.x, t1.y), t1.z);
 	float tFar = min(min(t2.x, t2.y), t2.z);
 
-	return tNear <= tFar;
-};
+	if (tNear > tFar)
+	{
+		return -1.0;
+	}
+
+	return tNear;
+}
 
 Intersection FindNearestIntersection(Ray ray)
 {
@@ -120,28 +125,96 @@ Intersection FindNearestIntersection(Ray ray)
 	intersection.distance = MAX_DISTANCE;
 	intersection.ray = ray;
 
-	nodes[0].boxMin.xyz = vec3(-18, 72, 11);
-	nodes[0].boxMax.xyz = vec3(46, 124, 60);
-	if (IntersectAABB(ray, nodes[0].boxMin.xyz, nodes[0].boxMax.xyz))
+	if (IntersectAABB(ray, nodes[0].boxMin.xyz, nodes[0].boxMax.xyz) > 0.0)
 	{
-		/*int index = 1;
+		int index = 0;
+		int farNodes[500];
+		int nIndex = 0;
 		while (true)
 		{
 			int leftIndex = nodes[index].childIndices[0];
 			int rightIndex = nodes[index].childIndices[1];
-
-			if (leftIndex != -1)
+			if (leftIndex >= 0) // We have children
 			{
-				KDTreeNode node = nodes[leftIndex];
-				if (IntersectAABB(ray.origin, ray.dir, node.boxMin.xyz, node.boxMax.xyz))
-				{
+				KDTreeNode leftNode = nodes[leftIndex];
+				KDTreeNode rightNode = nodes[rightIndex];
 
+				float leftDist = IntersectAABB(ray, leftNode.boxMin.xyz, leftNode.boxMax.xyz);
+				float rightDist = IntersectAABB(ray, rightNode.boxMin.xyz, rightNode.boxMax.xyz);
+
+				int farNodeIndex = -1;
+				int finalIndex = -1;
+				if (leftDist > 0.0 && leftDist >= rightDist)
+				{
+					farNodeIndex = rightIndex;
+					finalIndex = leftIndex;
+				}
+				else if (rightDist > 0.0 && rightDist >= leftDist)
+				{
+					farNodeIndex = leftIndex;
+					finalIndex = rightIndex;
+				}
+
+				if (finalIndex == -1)
+				{
+					break;
+				}
+				else
+				{
+					farNodes[nIndex] = farNodeIndex;
+					index = finalIndex;
+					++nIndex;
 				}
 			}
-		}*/
+			else
+			{
+				KDTreeNode node = nodes[index];
+				for (int i = 0; i < KDTREE_MAX_INDICES; ++i)
+				{
+					int globalIndex = node.atomIndices[i];
+					if (globalIndex < 0)
+					{
+						break;
+					}
+
+					vec3 p = bufferSpheres[globalIndex].center.xyz;
+					float t = HitSphereOutside(ray, p, bufferSpheres[globalIndex].properties.x);
+					if (t > MIN_DISTANCE && t < intersection.distance)
+					{
+						intersection.distance = t;
+						intersection.hitPoint = ray.origin + t * ray.dir;
+						intersection.normal = normalize(intersection.hitPoint - bufferSpheres[globalIndex].center.xyz);
+						intersection.sphereIndex = globalIndex;
+					}
+				}
+
+				if (intersection.distance != MAX_DISTANCE)
+				{
+					break;
+				}
+
+				bool end = true;
+				for (int i = nIndex; i >= 0; --i)
+				{
+					--nIndex;
+					if (farNodes[i] >= 0)
+					{
+						index = farNodes[i];
+						farNodes[i] = -1;
+						end = false;
+						break;
+					}
+				}
+
+				if (end)
+				{
+					break;
+				}
+			}
+		}
 
 		// Check for scene spheres intersections
-		for (int i = 0; i < uSpheresCount; ++i)
+		/*for (int i = 0; i < uSpheresCount; ++i)
 		{
 			vec3 p = bufferSpheres[i].center.xyz;
 			float t = HitSphereOutside(ray, p, bufferSpheres[i].properties.x);
@@ -152,7 +225,7 @@ Intersection FindNearestIntersection(Ray ray)
 				intersection.normal = normalize(intersection.hitPoint - bufferSpheres[i].center.xyz);
 				intersection.sphereIndex = i;
 			}
-		}
+		}*/
 	}
 
 	// Check for light intersection

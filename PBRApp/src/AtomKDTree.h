@@ -16,7 +16,7 @@ public:
 	const glm::vec3& GetBoxMax() const { return m_BoxMax; }
 	const std::vector<Atom>& GetAtoms() const { return m_Atoms; }
 private:
-	AtomKDTree(std::vector<Atom>&& atoms, uint32_t depth);
+	AtomKDTree(std::vector<Atom>&& atoms, const glm::vec3& boxMin, const glm::vec3& boxMax, uint32_t depth);
 
 	void AAtomKDTree(std::vector<Atom>&& atoms, uint32_t depth);
 private:
